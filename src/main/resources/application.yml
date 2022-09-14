@@ -1,0 +1,7 @@
+micronaut:
+  application:
+    name: becommerceBff
+netty:
+  default:
+    allocator:
+      max-order: 3
