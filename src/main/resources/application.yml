@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: becommerceBff
+  server:
+    context-path: /api/becommerce/v1
   router:
     static-resources:
       swagger:
@@ -9,6 +11,15 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+  info:
+    enabled: true
+    sensitive: false
+
 netty:
   default:
     allocator:

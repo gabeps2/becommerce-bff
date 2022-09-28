@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.becommerce</groupId>
-  <artifactId>becommerce-bff</artifactId>
-  <version>0.1</version>
-  <packaging>${packaging}</packaging>
 
   <parent>
     <groupId>io.micronaut</groupId>
@@ -13,21 +10,26 @@
     <version>3.6.3</version>
   </parent>
 
+  <groupId>becommerce</groupId>
+  <artifactId>becommerce</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+
   <properties>
-    <packaging>jar</packaging>
-    <jdk.version>11</jdk.version>
-    <release.version>11</release.version>
-    <micronaut.version>3.6.3</micronaut.version>
-    <micronaut.runtime>netty</micronaut.runtime>
+    <sonar.coverage.exclusions>
+      **/configuration/**,
+      **/constant/**,
+      **/enums/**,
+      **/exception/**,
+      **/*DTO.java,
+      **/App*,
+    </sonar.coverage.exclusions>
+    <sonar.cpd.exclusions>
+      **/requisicaostate/**
+    </sonar.cpd.exclusions>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <exec.mainClass>com.becommerce.Application</exec.mainClass>
   </properties>
-
-  <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
-  </repositories>
 
   <dependencies>
     <dependency>
@@ -41,49 +43,197 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
+      <groupId>arch.micronaut</groupId>
+      <artifactId>workflow2</artifactId>
+      <version>LATEST</version>
+    </dependency>
+    <dependency>
+      <groupId>arch.micronaut</groupId>
+      <artifactId>secret-provider-parameterstore</artifactId>
+      <version>LATEST</version>
+    </dependency>
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.sql</groupId>
+      <artifactId>micronaut-jdbc-hikari</artifactId>
+      <version>4.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.sql</groupId>
+      <artifactId>micronaut-hibernate-jpa</artifactId>
+      <version>4.7.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.data</groupId>
+      <artifactId>micronaut-data-processor</artifactId>
+      <version>3.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.data</groupId>
+      <artifactId>micronaut-data-hibernate-jpa</artifactId>
+      <version>3.8.0</version>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>s3</artifactId>
+      <version>2.17.276</version>
+    </dependency>
+    <dependency>
+      <groupId>io.github.resilience4j</groupId>
+      <artifactId>resilience4j-all</artifactId>
+      <version>1.7.1</version>
+    </dependency>
+    <dependency>
+      <groupId>arch.micronaut</groupId>
+      <artifactId>cache-provider-memcached</artifactId>
+      <version>LATEST</version>
+    </dependency>
+    <dependency>
+      <groupId>arch.micronaut</groupId>
+      <artifactId>cache-aop</artifactId>
+      <version>LATEST</version>
+    </dependency>
+
+    <!--
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>cache-aop</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>cache-provider</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>cache-provider-local</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>cache-provider-redis</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>messaging-provider-kafka</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>arch.micronaut</groupId>
+        <artifactId>messaging-provider-sqs</artifactId>
+    </dependency>
+    -->
+    <!-- Component Tests -->
+    <dependency>
+      <groupId>io.micronaut.flyway</groupId>
+      <artifactId>micronaut-flyway</artifactId>
+      <version>LATEST</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+      <version>2.1.214</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.tomakehurst</groupId>
+      <artifactId>wiremock-jre8</artifactId>
+      <version>2.34.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>3.0.12</version>
+      <type>pom</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <version>2.2-groovy-3.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>groovy-all</artifactId>
+          <groupId>*</groupId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.micronaut.test</groupId>
-      <artifactId>micronaut-test-junit5</artifactId>
+      <artifactId>micronaut-test-spock</artifactId>
+      <version>3.6.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-http-client</artifactId>
-      <scope>compile</scope>
+      <artifactId>micronaut-inject-groovy</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-http-server-netty</artifactId>
-      <scope>compile</scope>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-jackson-databind</artifactId>
-      <scope>compile</scope>
+      <groupId>io.micronaut.build</groupId>
+      <artifactId>micronaut-maven-plugin</artifactId>
+      <version>3.4.0</version>
     </dependency>
     <dependency>
-      <groupId>io.swagger.core.v3</groupId>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>4.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>logging-interceptor</artifactId>
+      <version>4.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.oltu.oauth2</groupId>
+      <artifactId>org.apache.oltu.oauth2.client</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.9.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.gsonfire</groupId>
+      <artifactId>gson-fire</artifactId>
+      <version>1.8.5</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
       <artifactId>swagger-annotations</artifactId>
-      <scope>compile</scope>
+      <version>1.6.7</version>
     </dependency>
+    <!-- Tests -->
     <dependency>
-      <groupId>jakarta.annotation</groupId>
-      <artifactId>jakarta.annotation-api</artifactId>
-      <scope>compile</scope>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.9.1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <scope>runtime</scope>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>2.0.1</version>
     </dependency>
   </dependencies>
 
@@ -93,7 +243,80 @@
         <groupId>io.micronaut.build</groupId>
         <artifactId>micronaut-maven-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>io.swagger.codegen.v3</groupId>
+        <artifactId>swagger-codegen-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
 
+      <!-- Tests -->
+
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generateApiTests>false</generateApiTests>
+              <generateModelTests>false</generateModelTests>
+              <inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>
+              <packageName>com.becommerce</packageName>
+              <apiPackage>com.becommerce.api</apiPackage>
+              <modelPackage>com.becommerce.model</modelPackage>
+              <generatorName>java-micronaut-client</generatorName>
+              <!-- Uncomment in order to display the config options -->
+              <!--							<configHelp>true</configHelp>-->
+              <configOptions>
+                <reactive>false</reactive>
+                <wrapInHttpResponse>true</wrapInHttpResponse>
+                <interfaceOnly>true</interfaceOnly>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>1.9.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+              <goal>compileTests</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <sources>
+            <source>
+              <directory>${project.basedir}/src/main/java</directory>
+              <includes>
+                <include>**/*.groovy</include>
+              </includes>
+            </source>
+          </sources>
+          <testSources>
+            <testSource>
+              <directory>${project.basedir}/src/test/java</directory>
+              <includes>
+                <include>**/*.groovy</include>
+              </includes>
+            </testSource>
+          </testSources>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -119,7 +342,8 @@
           </compilerArgs>
         </configuration>
       </plugin>
+      <!-- Tests -->
+
     </plugins>
   </build>
-
 </project>
