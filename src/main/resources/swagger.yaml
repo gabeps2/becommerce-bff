@@ -26,7 +26,7 @@ paths:
         - home
       summary: Get partners categories
       description: ''
-      operationId: getCategories
+      operationId: Get homepage data
       parameters:
         - name: "type"
           in: path
@@ -36,9 +36,7 @@ paths:
           schema:
             type: string
             default: products
-            enum:
-              - products
-              - services
+            enum: [ "products", "services" ]
       responses:
         '200':
           description: Successful operation
@@ -54,6 +52,7 @@ paths:
         - becommerce_auth:
             - write:becommerce
             - read:becommerce
+            -
   /category/{type}:
     get:
       tags:
@@ -70,9 +69,7 @@ paths:
           schema:
             type: string
             default: food
-            enum:
-              - food
-              - clothing
+            enum: [ "food", "clothing" ]
       responses:
         '200':
           description: successful operation
@@ -124,61 +121,95 @@ components:
       type: object
       properties:
         categories:
-            type: object
-            properties:
-              name:
-                type: string
-              deeplink:
-                type: string
-              icon:
-                type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
         news:
-            type: object
-            properties:
-              partnerName:
-                type: string
-              partnerDescription:
-                type: string
-              backgroundImg:
-                type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/New'
         partners:
-            type: object
-            properties:
-              name:
-                type: string
-              category:
-                type: string
-              avaliation:
-                type: string
-              location:
-                type: string
-              icon:
-                type: string
-    Category:
+          type: array
+          items:
+            $ref: '#/components/schemas/Partner'
+
+    CategoryPage:
       type: object
       properties:
         news:
-            type: object
-            properties:
-              partnerName:
-                type: string
-              partnerDescription:
-                type: string
-              backgroundImg:
-                type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/New'
         partners:
-            type: object
-            properties:
-              name:
-                type: string
-              category:
-                type: string
-              avaliation:
-                type: string
-              location:
-                type: string
-              icon:
-                type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/Partner'
+
+    PartnerPage:
+      type: object
+      properties:
+        partner:
+          $ref: '#/components/schemas/Partner'
+        productsLabel:
+          type: array
+          items:
+            type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    Category:
+      type: object
+      properties:
+        name:
+          type: string
+        deeplink:
+          type: string
+        icon:
+          type: string
+
+    New:
+      type: object
+      properties:
+        partnerName:
+          type: string
+        partnerDescription:
+          type: string
+        backgroundImg:
+          type: string
+
+    Partner:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        avaliation:
+          type: string
+        location:
+          type: string
+        icon:
+          type: string
+        backgroundImage:
+          type: string
+
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: double
+        quantity:
+          type: integer
+        image:
+          type: string
+
+
     ErrorView:
       type: object
       properties:
