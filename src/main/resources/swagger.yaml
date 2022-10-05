@@ -19,7 +19,44 @@ tags:
     externalDocs:
       description: Find out more
       url: http://swagger.io
+  - name: session
+    description: grants authorization and authentication
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+
 paths:
+  /session:
+    post:
+      tags:
+        - session
+      summary: grants authorization and authentication
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionResponse'
+        '400':
+          description: Invalid type supplied
+        '412':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorView'
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
   /home/{type}:
     get:
       tags:
@@ -52,7 +89,7 @@ paths:
         - becommerce_auth:
             - write:becommerce
             - read:becommerce
-            -
+
   /category/{type}:
     get:
       tags:
@@ -209,20 +246,35 @@ components:
         image:
           type: string
 
+    AuthenticationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    SessionResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: string
 
     ErrorView:
       type: object
       properties:
-        mensagem:
+        message:
           type: string
-        mensagemDetalhe:
+        detailMessage:
           type: string
-        codigo:
+        code:
           type: string
       example:
-        mensagem: "Campo XXXX inválido"
-        mensagemDetalhe: "XXX com formato inválido."
-        codigo: "ATCSPJ_1"
+        message: "Campo XXXX inválido"
+        detailMessage: "XXX com formato inválido."
+        code: "ATCSPJ_1"
   securitySchemes:
     becommerce_auth:
       type: oauth2
