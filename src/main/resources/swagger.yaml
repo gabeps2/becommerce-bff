@@ -274,7 +274,7 @@ components:
       example:
         message: "Campo XXXX inválido"
         detailMessage: "XXX com formato inválido."
-        code: "ATCSPJ_1"
+        code: "BEBFF_1"
   securitySchemes:
     becommerce_auth:
       type: oauth2
