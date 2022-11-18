@@ -19,13 +19,11 @@ netty:
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5432/BeCommerce
-    driverClassName: org.postgresql.Driver
-    username: root
-    password: root
-    maxActive: 3
-    maxIdle: 3
-    initialSize: 1
+    url: ${JDBC_URL:jdbc:postgresql://localhost:5432/BeCommerce}
+    username: ${JDBC_USER:root}
+    password: ${JDBC_PASSWORD:root}
+    driverClassName: ${JDBC_DRIVER:org.h2.Driver}
+    schema-generate: CREATE_DROP
 
 jpa:
   default:

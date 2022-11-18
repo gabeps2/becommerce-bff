@@ -17,21 +17,29 @@ netty:
     allocator:
       max-order: 3
 
-# PostgreSQL
-db_url: jdbc:postgresql://localhost:5432/BeCommerce
-db_driverClassName: org.postgresql.Driver
-spring_jpa_database_platform: org.hibernate.dialect.PostgreSQLDialect
-db_initialSize: 1
-db_maxActive: 3
-db_maxIdle: 3
-db_username: root
-db_password: root
+datasources:
+  default:
+    url: jdbc:postgresql://127.0.0.1:5432/BeCommerce
+    driverClassName: org.postgresql.Driver
+    username: root
+    password: root
+    maxActive: 3
+    maxIdle: 3
+    initialSize: 1
 
 jpa:
   default:
     entity-scan:
-      packages: 'becommerce.model'
+      packages: 'com.becommerce.model'
     properties:
+      javax:
+        persistence:
+          schema-generation:
+            scripts:
+              action: drop-and-create
+              create-target: createFile.ddl
+              drop-target: dropFile.ddl
       hibernate:
-        show_sql: false
-
+        hbm2ddl:
+          auto: update
+        show_sql: true
