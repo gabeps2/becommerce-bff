@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,12 +29,12 @@ public class CategoryModel {
     private String name;
 
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")

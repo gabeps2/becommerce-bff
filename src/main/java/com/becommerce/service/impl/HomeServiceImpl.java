@@ -41,7 +41,7 @@ public class HomeServiceImpl implements HomeService {
         Partner partner = new Partner();
         partner.setIcon("https://images.pexels.com/photos/2059151/pexels-photo-2059151.jpeg?cs=srgb&dl=pexels-jer-chung-2059151.jpg&fm=jpg");
         partner.setName("BH & Cia Espetinhos");
-        partner.setAvaliation("4.5");
+        partner.setAvaliation(4.5);
         partner.setCategory("Alimentos");
         partner.setLocation("Belo Horizonte e região");
         partner.setBackgroundImage("https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?cs=srgb&dl=pexels-pixabay-461198.jpg&fm=jpg");

@@ -10,7 +10,6 @@ import javax.inject.Inject;
 
 @Controller
 public class HomeController implements HomeApi {
-
     @Inject
     private HomeService homeService;
 

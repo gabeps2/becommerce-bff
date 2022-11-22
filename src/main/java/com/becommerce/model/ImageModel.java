@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -21,16 +22,16 @@ public class ImageModel {
     private Integer id;
 
     @NotNull
-    @Column(name = "url", nullable = false, unique = true)
-    private Integer url;
+    @Column(name = "url", nullable = false)
+    private String url;
 
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     private ProductModel product;

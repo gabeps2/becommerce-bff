@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Builder
@@ -21,16 +21,16 @@ public class TokenModel {
     private Integer id;
 
     @NotNull
-    @Column(name = "token", nullable = false, unique = true)
+    @Column(name = "token", nullable = false)
     private String token;
 
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     private PartnerModel partner;

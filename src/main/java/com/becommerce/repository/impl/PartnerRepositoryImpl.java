@@ -32,6 +32,11 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     }
 
     @Override
+    public Optional<PartnerModel> findByName(String name) {
+        return Optional.ofNullable(entityManager.find(PartnerModel.class, name));
+    }
+
+    @Override
     @TransactionalAdvice
     public PartnerModel save(PartnerModel partner) {
         entityManager.persist(partner);
@@ -53,7 +58,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     @Override
     @ReadOnly
     public List<PartnerModel> findAll() {
-        String qlString = "SELECT * FROM Genre as g";
+        String qlString = "SELECT * FROM tb_partner as p";
         TypedQuery<PartnerModel> query = entityManager.createQuery(qlString, PartnerModel.class);
         return query.getResultList();
     }

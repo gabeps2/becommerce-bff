@@ -1,15 +1,13 @@
 package com.becommerce.model;
 
-import com.becommerce.model.enums.CustomerType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_address")
@@ -21,33 +19,35 @@ public class AddressModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     @NotNull
-    @Column(name = "street", nullable = false, unique = true)
+    @Column(name = "street", nullable = false)
     private String street;
     @NotNull
-    @Column(name = "street_type", nullable = false, unique = true)
+    @Column(name = "street_type", nullable = false)
     private String streetType;
     @NotNull
-    @Column(name = "number", nullable = false, unique = true)
+    @Column(name = "number", nullable = false)
     private Integer number;
     @NotNull
-    @Column(name = "city", nullable = false, unique = true)
+    @Column(name = "city", nullable = false)
     private String city;
     @NotNull
-    @Column(name = "state", nullable = false, unique = true)
+    @Column(name = "state", nullable = false)
     private String state;
     @NotNull
-    @Column(name = "country", nullable = false, unique = true)
+    @Column(name = "country", nullable = false)
     private String country;
     @NotNull
-    @Column(name = "zip_code", nullable = false, unique = true)
+    @Column(name = "zip_code", nullable = false)
     private String zipCode;
     @NotNull
-    @Column(name = "neighborhood", nullable = false, unique = true)
+    @Column(name = "neighborhood", nullable = false)
     private String neighborhood;
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+    @OneToOne
+    private PartnerModel partner;
 }

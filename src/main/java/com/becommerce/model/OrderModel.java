@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +27,7 @@ public class OrderModel implements Serializable {
     private Integer id;
 
     @NotNull
-    @Column(name = "status", nullable = false, unique = true)
+    @Column(name = "status", nullable = false)
     private String status;
 
     @NotNull
@@ -34,12 +35,12 @@ public class OrderModel implements Serializable {
     private String note;
 
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     private PartnerModel partner;

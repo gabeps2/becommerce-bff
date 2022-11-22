@@ -8,6 +8,7 @@ import org.hibernate.annotations.ManyToAny;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,7 @@ public class PartnerModel implements Serializable {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     @NotNull
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
     @NotNull
     @Column(name = "email", nullable = false, unique = true)
@@ -37,23 +38,23 @@ public class PartnerModel implements Serializable {
     @Column(name = "cnpj", unique = true)
     private String cnpj = "";
     @NotNull
-    @Column(name = "description", unique = true)
+    @Column(name = "description")
     private String description = "";
     @NotNull
-    @Column(name = "location", unique = true)
+    @Column(name = "location")
     private String location = "";
     @NotNull
-    @Column(name = "avaliation", unique = true)
-    private String avaliation = "";
+    @Column(name = "avaliation")
+    private Double avaliation;
     @NotNull
-    @Column(name = "icon", unique = true)
+    @Column(name = "icon")
     private String icon = "";
     @NotNull
-    @Column(name = "created_at", nullable = false, unique = true)
-    private Date createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
     @NotNull
-    @Column(name = "updated_at", nullable = false, unique = true)
-    private Date updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
 
     @JsonIgnore
     @OneToMany(mappedBy = "partner")
@@ -66,4 +67,7 @@ public class PartnerModel implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "partner")
     private Set<OrderModel> orders = new HashSet<>();
+
+    @OneToOne
+    private AddressModel address;
 }

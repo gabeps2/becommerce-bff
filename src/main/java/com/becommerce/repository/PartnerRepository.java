@@ -10,6 +10,8 @@ public interface PartnerRepository {
 
     Optional<PartnerModel> findById(int id);
 
+    Optional<PartnerModel> findByName(String name);
+
     PartnerModel save(@NotBlank PartnerModel partner);
 
     PartnerModel saveWithException(@NotBlank String name);

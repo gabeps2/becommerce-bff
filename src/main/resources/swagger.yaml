@@ -122,7 +122,62 @@ paths:
         - becommerce_auth:
             - write:becommerce
             - read:becommerce
-  /partner/{name}:
+
+  /customer/register:
+    post:
+      tags:
+        - register
+      summary: Register new customer
+      operationId: registerCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterCustomerRequest'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '412':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorView'
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /partner/register:
+    post:
+      tags:
+        - register
+      summary: Register new partner
+      operationId: registerPartner
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterPartnerRequest'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '412':
+          description: "Error"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorView'
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /partner/{id}:
     get:
       tags:
         - partner
@@ -130,22 +185,21 @@ paths:
       description: ''
       operationId: getByPartner
       parameters:
-        - name: "name"
+        - name: "id"
           in: path
-          description: Partner name
+          description: Partner id
           required: true
           explode: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Category'
+                type: object
+                $ref: '#/components/schemas/PartnerPage'
         '400':
           description: Invalid tag value
       security:
@@ -224,7 +278,7 @@ components:
         category:
           type: string
         avaliation:
-          type: string
+          type: double
         location:
           type: string
         icon:
@@ -252,6 +306,50 @@ components:
         email:
           type: string
         password:
+          type: string
+
+    RegisterCustomerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+
+    RegisterPartnerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        cnpj:
+          type: string
+        description:
+          type: string
+        icon:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressRequest'
+
+    AddressRequest:
+      type: object
+      properties:
+        street:
+          type: string
+        streetType:
+          type: string
+        number:
+          type: integer
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipCode:
+          type: string
+        neighborhood:
           type: string
 
     SessionResponse:
