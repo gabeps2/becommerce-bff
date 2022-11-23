@@ -8,5 +8,7 @@ import java.util.Optional;
 
 public interface ProductService {
     Optional<ProductModel> getById(String id);
-    List<Product> getByPartner(int id);
+    List<Product> getByPartner(String id);
+
+    void save(ProductModel productModel);
 }

@@ -3,6 +3,7 @@ package com.becommerce.controller;
 import com.becommerce.api.RegisterApi;
 import com.becommerce.model.RegisterCustomerRequest;
 import com.becommerce.model.RegisterPartnerRequest;
+import com.becommerce.model.RegisterProductRequest;
 import com.becommerce.service.RegisterService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
@@ -17,7 +18,12 @@ public class RegisterController implements RegisterApi {
     
     @Override
     public HttpResponse<Void> registerPartner(RegisterPartnerRequest registerPartnerRequest) {
-        return null;
+        return HttpResponse.noContent();
+    }
+
+    @Override
+    public HttpResponse<Void> registerProduct(String X_API_TOKEN, RegisterProductRequest registerProductRequest) {
+        return HttpResponse.noContent();
     }
 
     @Override

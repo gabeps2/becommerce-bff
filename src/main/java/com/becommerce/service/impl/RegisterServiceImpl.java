@@ -1,12 +1,11 @@
 package com.becommerce.service.impl;
 
-import com.becommerce.exception.ErrorEnum;
 import com.becommerce.exception.RegisterUserException;
-import com.becommerce.model.PartnerModel;
-import com.becommerce.model.RegisterCustomerRequest;
+import com.becommerce.model.*;
+import com.becommerce.model.enums.ErrorEnum;
 import com.becommerce.service.PartnerService;
+import com.becommerce.service.ProductService;
 import com.becommerce.service.RegisterService;
-import com.becommerce.utils.PasswordStorage;
 import io.micronaut.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -23,9 +22,11 @@ public class RegisterServiceImpl implements RegisterService {
     @Inject
     PartnerService partnerService;
 
+    @Inject
+    ProductService productService;
+
     @Override
     public void registerCustomer(RegisterCustomerRequest request) {
-        assert request.getPassword() != null;
         try {
             String hashedPassword = createHash(request.getPassword());
             PartnerModel partnerModel = PartnerModel.builder()
@@ -37,7 +38,16 @@ public class RegisterServiceImpl implements RegisterService {
                     .build();
             partnerService.savePartner(partnerModel);
         } catch (Exception e) {
-            throw new RegisterUserException(e.getMessage(), e.getLocalizedMessage(), ErrorEnum.REGISTER_USER_ERROR.getCode(), HttpStatus.UNPROCESSABLE_ENTITY);
+            throw new RegisterUserException(
+                    ErrorEnum.REGISTER_CUSTOMER_ERROR.getMessage(),
+                    ErrorEnum.REGISTER_CUSTOMER_ERROR.getDetailMessage(),
+                    ErrorEnum.REGISTER_CUSTOMER_ERROR.getCode(),
+                    HttpStatus.UNPROCESSABLE_ENTITY
+            );
         }
+    }
+
+    @Override
+    public void registerProduct(RegisterProductRequest request, String token) {
     }
 }

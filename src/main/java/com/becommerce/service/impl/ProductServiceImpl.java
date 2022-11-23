@@ -25,7 +25,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getByPartner(int id) {
+    public List<Product> getByPartner(String id) {
         return mapper.toProducts(productRepository.getByPartner(id));
+    }
+
+    @Override
+    public void save(ProductModel productModel) {
+        productRepository.save(productModel);
     }
 }

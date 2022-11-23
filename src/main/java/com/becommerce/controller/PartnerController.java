@@ -22,7 +22,7 @@ public class PartnerController implements PartnerApi {
     ProductService productService;
 
     @Override
-    public HttpResponse<PartnerPage> getByPartner(Integer id) {
+    public HttpResponse<PartnerPage> getByPartner(String id) {
         Partner partner = partnerService.getPartnerDto(id,"");
         List<Product> products = productService.getByPartner(id);
 

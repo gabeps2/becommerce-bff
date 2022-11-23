@@ -23,7 +23,7 @@ public class PartnerServiceImpl implements PartnerService {
     private Mapper mapper;
 
     @Override
-    public Optional<PartnerModel> getById(int id) {
+    public Optional<PartnerModel> getById(String id) {
         return partnerRepository.findById(id);
     }
 
@@ -39,7 +39,7 @@ public class PartnerServiceImpl implements PartnerService {
         return partnerRepository.save(partner);
     }
     @Override
-    public Partner getPartnerDto(int id, String name) {
+    public Partner getPartnerDto(String id, String name) {
         Optional<PartnerModel> partnerModel;
         if(!name.isEmpty()){
             partnerModel = getByName(name);

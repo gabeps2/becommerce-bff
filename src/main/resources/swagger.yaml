@@ -135,7 +135,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterCustomerRequest'
       responses:
-        '200':
+        '201':
           description: Successful operation
         '400':
           description: Invalid type supplied
@@ -162,7 +162,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterPartnerRequest'
       responses:
-        '200':
+        '201':
           description: Successful operation
         '400':
           description: Invalid type supplied
@@ -191,7 +191,7 @@ paths:
           required: true
           explode: true
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           description: successful operation
@@ -200,6 +200,37 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/PartnerPage'
+        '400':
+          description: Invalid tag value
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /product/register:
+    post:
+      tags:
+        - product
+        - register
+      summary: Register product
+      description: ''
+      operationId: registerProduct
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterProductRequest'
+      responses:
+        '201':
+          description: successful operation
         '400':
           description: Invalid tag value
       security:
@@ -331,6 +362,26 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/AddressRequest'
+
+    RegisterProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: double
+        quantity:
+          type: int
+        category:
+          type: string
+        icon:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
 
     AddressRequest:
       type: object

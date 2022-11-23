@@ -8,15 +8,17 @@ import java.util.Optional;
 
 public interface PartnerRepository {
 
-    Optional<PartnerModel> findById(int id);
+    Optional<PartnerModel> findById(String id);
 
     Optional<PartnerModel> findByName(String name);
+
+    Optional<PartnerModel> findByEmail(String email);
 
     PartnerModel save(@NotBlank PartnerModel partner);
 
     PartnerModel saveWithException(@NotBlank String name);
 
-    void deleteById(int id);
+    void deleteById(String id);
 
     List<PartnerModel> findAll();
 

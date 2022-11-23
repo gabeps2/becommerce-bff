@@ -2,6 +2,7 @@ package com.becommerce.repository.impl;
 
 import com.becommerce.config.ApplicationConfiguration;
 import com.becommerce.model.PartnerModel;
+import com.becommerce.model.ProductModel;
 import com.becommerce.repository.PartnerRepository;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.transaction.annotation.ReadOnly;
@@ -27,13 +28,23 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     @ReadOnly
-    public Optional<PartnerModel> findById(int id) {
+    public Optional<PartnerModel> findById(String id) {
         return Optional.ofNullable(entityManager.find(PartnerModel.class, id));
     }
 
     @Override
     public Optional<PartnerModel> findByName(String name) {
         return Optional.ofNullable(entityManager.find(PartnerModel.class, name));
+    }
+
+    @Override
+    @TransactionalAdvice
+    public Optional<PartnerModel> findByEmail(String email) {
+        String qlString = "SELECT p FROM PartnerModel as p WHERE email = :email";
+        return entityManager
+                .createQuery(qlString, PartnerModel.class)
+                .setParameter("email", email)
+                .getResultList().stream().findFirst();
     }
 
     @Override
@@ -51,7 +62,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     @TransactionalAdvice
-    public void deleteById(int id) {
+    public void deleteById(String id) {
         findById(id).ifPresent(entityManager::remove);
     }
 

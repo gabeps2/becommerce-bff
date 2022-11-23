@@ -1,7 +1,8 @@
 package com.becommerce.model.enums;
 
 public enum ErrorEnum {
-    AUTHENTICATE_USER_ERROR("Invalid credentials.", "Invalid email/password combination.", "BeBFF_01");
+    AUTHENTICATE_USER_ERROR("Invalid credentials.", "Invalid email/password combination.", "BeBFF_01"),
+    REGISTER_CUSTOMER_ERROR("Error when register new customer", "Error when register new customer", "BeBFF_02");
 
     private final String message;
     private final String detailMessage;

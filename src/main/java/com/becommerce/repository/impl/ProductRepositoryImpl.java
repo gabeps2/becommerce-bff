@@ -6,6 +6,7 @@ import com.becommerce.model.ProductModel;
 import com.becommerce.repository.ProductRepository;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.transaction.annotation.ReadOnly;
+import io.micronaut.transaction.annotation.TransactionalAdvice;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,7 +29,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     @ReadOnly
-    public List<ProductModel> getByPartner(int id) {
+    public List<ProductModel> getByPartner(String id) {
         String qlString = "SELECT tp FROM ProductModel as tp WHERE id = :id";
 
         return entityManager
@@ -45,5 +46,10 @@ public class ProductRepositoryImpl implements ProductRepository {
         return query.getResultList();
     }
 
-
+    @Override
+    @TransactionalAdvice
+    public ProductModel save(ProductModel productModel) {
+        entityManager.persist(productModel);
+        return productModel;
+    }
 }
