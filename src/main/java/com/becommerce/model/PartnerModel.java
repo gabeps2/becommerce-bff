@@ -28,6 +28,10 @@ public class PartnerModel implements Serializable {
     private UUID id;
 
     @NotNull
+    @Column(name = "name")
+    private String name = "";
+
+    @NotNull
     @Column(name = "cnpj", unique = true)
     private String cnpj = "";
 

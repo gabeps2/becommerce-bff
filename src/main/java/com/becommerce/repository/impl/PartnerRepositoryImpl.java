@@ -63,7 +63,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     @Override
     @ReadOnly
     public List<PartnerModel> findAll() {
-        String qlString = "SELECT p FROM tb_partner as p";
+        String qlString = "SELECT p FROM PartnerModel as p";
         TypedQuery<PartnerModel> query = entityManager.createQuery(qlString, PartnerModel.class);
         return query.getResultList();
     }

@@ -103,6 +103,7 @@ public class RegisterServiceImpl implements RegisterService {
         UserModel user = response.get();
 
         PartnerModel partnerModel = PartnerModel.builder()
+                .name(request.getPartnerSchema().getName())
                 .user(user)
                 .cnpj(request.getPartnerSchema().getCnpj())
                 .description(request.getPartnerSchema().getDescription())

@@ -150,6 +150,38 @@ paths:
             - write:becommerce
             - read:becommerce
 
+  /partner/list:
+    get:
+      tags:
+        - list
+        - partner
+      summary: List all partners
+      description: ''
+      operationId: listPartners
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/PartnersListSchema'
+        '400':
+          description: Invalid tag value
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+
   /product/register:
     post:
       tags:
@@ -293,6 +325,14 @@ components:
           items:
             $ref: '#/components/schemas/ProductSchema'
 
+    PartnersListSchema:
+      type: object
+      properties:
+        partners:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerSchema'
+
     Category:
       type: object
       properties:
@@ -370,6 +410,10 @@ components:
     PartnerSchema:
       type: object
       properties:
+        id:
+          type: string
+        name:
+          type: string
         cnpj:
           type: string
         description:

@@ -2,6 +2,7 @@ package com.becommerce.controller;
 
 import com.becommerce.api.PartnerApi;
 import com.becommerce.model.PartnerPageSchema;
+import com.becommerce.model.PartnersListSchema;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.ProductService;
 import io.micronaut.http.HttpResponse;
@@ -32,5 +33,10 @@ public class PartnerController implements PartnerApi {
 //        partnerPage.setProductsLabel(list);
 
         return HttpResponse.ok();
+    }
+
+    @Override
+    public HttpResponse<PartnersListSchema> listPartners(String xApiToken) {
+        return HttpResponse.ok(partnerService.findAll());
     }
 }

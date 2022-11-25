@@ -1,6 +1,7 @@
 package com.becommerce.mapper;
 
 import com.becommerce.model.*;
+import lombok.var;
 
 import javax.inject.Named;
 import java.time.LocalDateTime;
@@ -42,6 +43,19 @@ public class Mapper {
                 .build();
     }
 
+    public AddressSchema toAddressSchema(AddressModel addressModel) {
+        return AddressSchema.builder()
+                .city(addressModel.getCity())
+                .state(addressModel.getState())
+                .country(addressModel.getCountry())
+                .number(addressModel.getNumber())
+                .street(addressModel.getStreet())
+                .streetType(addressModel.getStreetType())
+                .neighborhood(addressModel.getNeighborhood())
+                .zipCode(addressModel.getZipCode())
+                .build();
+    }
+
     public List<CategorySchema> toCategory(List<CategoryModel> categories) {
         return categories.stream().map(c -> CategorySchema
                 .builder()
@@ -74,5 +88,30 @@ public class Mapper {
         Stream<Product> products;
         products = productModels.stream().map(this::toProduct);
         return products.collect(Collectors.toList());
+    }
+
+    public PartnerSchema toPartnerSchema(PartnerModel partnerModel) {
+        AddressSchema addressSchema = toAddressSchema(partnerModel.getUser().getAddress());
+        List<CategorySchema> categorySchema = toCategory(partnerModel.getCategories());
+        String partnerName = partnerModel.getName().isEmpty() ? partnerModel.getUser().getName() : partnerModel.getName();
+
+        return PartnerSchema.builder()
+                .id(partnerModel.getId().toString())
+                .name(partnerName)
+                .cnpj(partnerModel.getCnpj())
+                .icon(partnerModel.getIcon())
+                .avaliation(partnerModel.getAvaliation())
+                .location(partnerModel.getLocation())
+                .backgroundImage(partnerModel.getBackgroundImage())
+                .description(partnerModel.getDescription())
+                .categories(categorySchema)
+                .address(addressSchema)
+                .build();
+    }
+
+    public List<PartnerSchema> toPartnersSchema(List<PartnerModel> partnerModels) {
+        Stream<PartnerSchema> partners;
+        partners = partnerModels.stream().map(this::toPartnerSchema);
+        return partners.collect(Collectors.toList());
     }
 }
