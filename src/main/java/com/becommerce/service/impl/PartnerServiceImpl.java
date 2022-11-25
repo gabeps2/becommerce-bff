@@ -1,17 +1,15 @@
 package com.becommerce.service.impl;
 
-import com.becommerce.model.Partner;
 import com.becommerce.model.PartnerModel;
 import com.becommerce.mapper.Mapper;
+import com.becommerce.model.PartnerSchema;
 import com.becommerce.repository.PartnerRepository;
 import com.becommerce.service.PartnerService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Optional;
 
 @Named("PartnerService")
@@ -38,12 +36,13 @@ public class PartnerServiceImpl implements PartnerService {
         partner.setCreatedAt(LocalDateTime.now());
         return partnerRepository.save(partner);
     }
+
     @Override
-    public Partner getPartnerDto(String id, String name) {
+    public PartnerSchema getPartnerDto(String id, String name) {
         Optional<PartnerModel> partnerModel;
-        if(!name.isEmpty()){
+        if (!name.isEmpty()) {
             partnerModel = getByName(name);
-        }else{
+        } else {
             partnerModel = getById(id);
         }
         return partnerModel.map(model -> mapper.toPartner(model)).orElse(null);

@@ -1,7 +1,7 @@
 package com.becommerce.service;
 
-import com.becommerce.model.SessionResponse;
+import com.becommerce.model.SessionSchema;
 
 public interface AuthenticateUserService {
-    SessionResponse authenticate(String email, String password);
+    SessionSchema authenticate(String email, String password);
 }

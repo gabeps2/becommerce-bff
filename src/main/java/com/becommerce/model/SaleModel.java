@@ -15,11 +15,11 @@ import java.util.*;
 
 @Entity
 @Builder
-@Table(name = "tb_category")
+@Table(name = "tb_sale")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CategoryModel {
+public class SaleModel {
     @Id
     @Type(type = "pg-uuid")
     @Column(updatable = false, nullable = false, columnDefinition = "uuid DEFAULT uuid_generate_v4()")
@@ -28,8 +28,12 @@ public class CategoryModel {
     private UUID id;
 
     @NotNull
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @NotNull
+    @Column(name = "note", unique = true)
+    private String note;
 
     @NotNull
     @Column(name = "created_at", nullable = false)
@@ -39,15 +43,22 @@ public class CategoryModel {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @OneToOne
+    private AddressModel address;
+
+    @ManyToOne
+    private UserModel user;
+
+    @ManyToOne
+    private PartnerModel partner;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "category_partner",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "partner_id"))
-    private List<PartnerModel> partners = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "category")
+            name = "sale_product",
+            joinColumns = @JoinColumn(name = "sale_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<ProductModel> products = new ArrayList<>();
+
+
 }

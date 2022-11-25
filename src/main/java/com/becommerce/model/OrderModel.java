@@ -45,7 +45,7 @@ public class OrderModel implements Serializable {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    private PartnerModel partner;
+    private UserModel user;
 
     @JsonIgnore
     @ManyToMany
@@ -53,6 +53,5 @@ public class OrderModel implements Serializable {
             name = "order_product",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<ProductModel> products = new HashSet<>();
-
+    private List<ProductModel> products = new ArrayList<>();
 }

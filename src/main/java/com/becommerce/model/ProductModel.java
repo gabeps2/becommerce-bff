@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -57,15 +59,19 @@ public class ProductModel {
 
     @JsonIgnore
     @OneToMany(mappedBy = "product")
-    private Set<ImageModel> images = new HashSet<>();
+    private List<ImageModel> images = new ArrayList<>();
 
     @ManyToOne
     private CategoryModel category;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "products")
-    private Set<OrderModel> orders = new HashSet<>();
+    private List<OrderModel> orders = new ArrayList<>();
 
     @ManyToOne
     private PartnerModel partner;
+
+    @ManyToMany(mappedBy = "products")
+    @NotFound(action= NotFoundAction.IGNORE)
+    private List<SaleModel> sales = new ArrayList<>();
 }

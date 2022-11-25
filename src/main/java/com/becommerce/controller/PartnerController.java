@@ -1,18 +1,13 @@
 package com.becommerce.controller;
 
 import com.becommerce.api.PartnerApi;
-import com.becommerce.model.Category;
-import com.becommerce.model.Partner;
-import com.becommerce.model.PartnerPage;
-import com.becommerce.model.Product;
+import com.becommerce.model.PartnerPageSchema;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.ProductService;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class PartnerController implements PartnerApi {
@@ -22,20 +17,20 @@ public class PartnerController implements PartnerApi {
     ProductService productService;
 
     @Override
-    public HttpResponse<PartnerPage> getByPartner(String id) {
-        Partner partner = partnerService.getPartnerDto(id,"");
-        List<Product> products = productService.getByPartner(id);
+    public HttpResponse<PartnerPageSchema> getByPartner(String id) {
+//        PartnerPageSchema partner = partnerService.getPartnerDto(id,"");
+//        List<Product> products = productService.getByPartner(id);
+//
+//        List<String> list = new ArrayList<>();
+//        list.add("Espetinhos");
+//        list.add("Salgadinhos");
+//        list.add("Bebidas");
+//
+//        PartnerPage partnerPage = new PartnerPage();
+//        partnerPage.setPartner(partner);
+//        partnerPage.setProducts(products);
+//        partnerPage.setProductsLabel(list);
 
-        List<String> list = new ArrayList<>();
-        list.add("Espetinhos");
-        list.add("Salgadinhos");
-        list.add("Bebidas");
-
-        PartnerPage partnerPage = new PartnerPage();
-        partnerPage.setPartner(partner);
-        partnerPage.setProducts(products);
-        partnerPage.setProductsLabel(list);
-
-        return HttpResponse.ok(partnerPage);
+        return HttpResponse.ok();
     }
 }

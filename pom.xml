@@ -332,6 +332,10 @@
                                 <reactive>false</reactive>
                                 <wrapInHttpResponse>true</wrapInHttpResponse>
                                 <interfaceOnly>true</interfaceOnly>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Builder
+                                    @lombok.AllArgsConstructor
+                                </additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
@@ -401,6 +405,8 @@
                         <arg>-Amicronaut.processing.group=com.becommerce</arg>
                         <arg>-Amicronaut.processing.module=becommerce-bff</arg>
                     </compilerArgs>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <!-- Tests -->

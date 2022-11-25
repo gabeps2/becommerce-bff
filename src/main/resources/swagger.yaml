@@ -36,14 +36,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthenticationRequest'
+              $ref: '#/components/schemas/AuthenticationSchema'
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SessionResponse'
+                $ref: '#/components/schemas/SessionSchema'
         '400':
           description: Invalid type supplied
         '412':
@@ -57,83 +57,18 @@ paths:
             - write:becommerce
             - read:becommerce
 
-  /home/{type}:
-    get:
-      tags:
-        - home
-      summary: Get partners categories
-      description: ''
-      operationId: Get homepage data
-      parameters:
-        - name: "type"
-          in: path
-          description: Home payload type
-          required: true
-          explode: true
-          schema:
-            type: string
-            default: products
-            enum: [ "products", "services" ]
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Home'
-        '400':
-          description: Invalid type supplied
-        '405':
-          description: Validation exception
-      security:
-        - becommerce_auth:
-            - write:becommerce
-            - read:becommerce
-
-  /category/{type}:
-    get:
-      tags:
-        - category
-      summary: Show partners by category
-      description: ''
-      operationId: getByCategory
-      parameters:
-        - name: "type"
-          in: path
-          description: Category type
-          required: true
-          explode: true
-          schema:
-            type: string
-            default: food
-            enum: [ "food", "clothing" ]
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Category'
-        '400':
-          description: Invalid status value
-      security:
-        - becommerce_auth:
-            - write:becommerce
-            - read:becommerce
-
-  /customer/register:
+  /user/register:
     post:
       tags:
         - register
-      summary: Register new customer
-      operationId: registerCustomer
+        - user
+      summary: Register new user
+      operationId: registerUser
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterCustomerRequest'
+              $ref: '#/components/schemas/RegisterUserSchema'
       responses:
         '201':
           description: Successful operation
@@ -156,11 +91,19 @@ paths:
         - register
       summary: Register new partner
       operationId: registerPartner
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterPartnerRequest'
+              $ref: '#/components/schemas/RegisterPartnerSchema'
       responses:
         '201':
           description: Successful operation
@@ -181,7 +124,7 @@ paths:
     get:
       tags:
         - partner
-      summary: Products by partner
+      summary: Partner page
       description: ''
       operationId: getByPartner
       parameters:
@@ -199,7 +142,7 @@ paths:
             application/json:
               schema:
                 type: object
-                $ref: '#/components/schemas/PartnerPage'
+                $ref: '#/components/schemas/PartnerPageSchema'
         '400':
           description: Invalid tag value
       security:
@@ -227,7 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterProductRequest'
+              $ref: '#/components/schemas/ProductSchema'
       responses:
         '201':
           description: successful operation
@@ -237,41 +180,110 @@ paths:
         - becommerce_auth:
             - write:becommerce
             - read:becommerce
+
+  /home/{type}:
+    get:
+      tags:
+        - home
+      summary: Get partners categories
+      description: ''
+      operationId: Get homepage data
+      parameters:
+        - name: "type"
+          in: path
+          description: Home payload type
+          required: true
+          explode: true
+          schema:
+            type: string
+            default: products
+            enum: [ "products", "services" ]
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '405':
+          description: Validation exception
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
 components:
   schemas:
-    Home:
+    AuthenticationSchema:
       type: object
       properties:
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/Category'
-        news:
-          type: array
-          items:
-            $ref: '#/components/schemas/New'
-        partners:
-          type: array
-          items:
-            $ref: '#/components/schemas/Partner'
+        email:
+          type: string
+        password:
+          type: string
 
-    CategoryPage:
+    SessionSchema:
       type: object
       properties:
-        news:
-          type: array
-          items:
-            $ref: '#/components/schemas/New'
-        partners:
-          type: array
-          items:
-            $ref: '#/components/schemas/Partner'
+        user:
+          type: object
+          $ref: '#/components/schemas/UserSchema'
+        access_token:
+          type: string
+        expires_in:
+          type: string
 
-    PartnerPage:
+    UserSchema:
       type: object
       properties:
-        partner:
-          $ref: '#/components/schemas/Partner'
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        userType:
+          type: string
+        partnerSchema:
+          type: object
+          $ref: '#/components/schemas/PartnerSchema'
+
+    RegisterUserSchema:
+      type: object
+      properties:
+        name:
+          type: string
+        userType:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressSchema'
+
+    RegisterPartnerSchema:
+      type: object
+      properties:
+        userId:
+          type: string
+        partnerSchema:
+          type: object
+          $ref: '#/components/schemas/PartnerSchema'
+        addressSchema:
+          type: object
+          $ref: '#/components/schemas/AddressSchema'
+
+    PartnerPageSchema:
+      type: object
+      properties:
+        userSchema:
+          type: object
+          $ref: '#/components/schemas/UserSchema'
+        partnerSchema:
+          type: object
+          $ref: '#/components/schemas/PartnerSchema'
+        addressSchema:
+          type: object
+          $ref: '#/components/schemas/AddressSchema'
         productsLabel:
           type: array
           items:
@@ -279,7 +291,7 @@ components:
         products:
           type: array
           items:
-            $ref: '#/components/schemas/Product'
+            $ref: '#/components/schemas/ProductSchema'
 
     Category:
       type: object
@@ -301,22 +313,6 @@ components:
         backgroundImg:
           type: string
 
-    Partner:
-      type: object
-      properties:
-        name:
-          type: string
-        category:
-          type: string
-        avaliation:
-          type: double
-        location:
-          type: string
-        icon:
-          type: string
-        backgroundImage:
-          type: string
-
     Product:
       type: object
       properties:
@@ -331,39 +327,7 @@ components:
         image:
           type: string
 
-    AuthenticationRequest:
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-
-    RegisterCustomerRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        email:
-          type: string
-        password:
-          type: string
-
-    RegisterPartnerRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        cnpj:
-          type: string
-        description:
-          type: string
-        icon:
-          type: string
-        address:
-          $ref: '#/components/schemas/AddressRequest'
-
-    RegisterProductRequest:
+    ProductSchema:
       type: object
       properties:
         name:
@@ -383,7 +347,7 @@ components:
           items:
             type: string
 
-    AddressRequest:
+    AddressSchema:
       type: object
       properties:
         street:
@@ -403,12 +367,35 @@ components:
         neighborhood:
           type: string
 
-    SessionResponse:
+    PartnerSchema:
       type: object
       properties:
-        access_token:
+        cnpj:
           type: string
-        expires_in:
+        description:
+          type: string
+        location:
+          type: string
+        avaliation:
+          type: double
+        icon:
+          type: string
+        backgroundImage:
+          type: string
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schema/CategorySchema'
+        address:
+          type: object
+          $ref: '#/components/schema/AddressSchema'
+
+    CategorySchema:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
           type: string
 
     ErrorView:
@@ -424,6 +411,7 @@ components:
         message: "Campo XXXX inválido"
         detailMessage: "XXX com formato inválido."
         code: "BEBFF_1"
+
   securitySchemes:
     becommerce_auth:
       type: oauth2

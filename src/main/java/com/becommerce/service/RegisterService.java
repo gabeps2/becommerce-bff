@@ -1,10 +1,11 @@
 package com.becommerce.service;
 
-import com.becommerce.model.RegisterCustomerRequest;
-import com.becommerce.model.RegisterProductRequest;
+import com.becommerce.model.RegisterUserSchema;
+import com.becommerce.model.RegisterPartnerSchema;
+import com.becommerce.model.ProductSchema;
 
 public interface RegisterService {
-    void registerCustomer(RegisterCustomerRequest request);
-    void registerProduct(RegisterProductRequest request, String token);
-
+    void registerUser(RegisterUserSchema userSchema);
+    void registerProduct(ProductSchema request, String token);
+    void registerPartner(RegisterPartnerSchema registerPartnerSchema, String token);
 }

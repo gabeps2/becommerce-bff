@@ -1,8 +1,6 @@
 package com.becommerce.repository.impl;
 
-import com.becommerce.config.ApplicationConfiguration;
 import com.becommerce.model.PartnerModel;
-import com.becommerce.model.ProductModel;
 import com.becommerce.repository.PartnerRepository;
 import io.micronaut.data.annotation.Repository;
 import io.micronaut.transaction.annotation.ReadOnly;
@@ -20,11 +18,7 @@ import java.util.Optional;
 public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Inject
-    private final EntityManager entityManager;
-
-    public PartnerRepositoryImpl(EntityManager entityManager, ApplicationConfiguration applicationConfiguration) {
-        this.entityManager = entityManager;
-    }
+    private EntityManager entityManager;
 
     @Override
     @ReadOnly
@@ -69,7 +63,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
     @Override
     @ReadOnly
     public List<PartnerModel> findAll() {
-        String qlString = "SELECT * FROM tb_partner as p";
+        String qlString = "SELECT p FROM tb_partner as p";
         TypedQuery<PartnerModel> query = entityManager.createQuery(qlString, PartnerModel.class);
         return query.getResultList();
     }

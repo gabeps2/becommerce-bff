@@ -39,5 +39,5 @@ public class TokenModel {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    private PartnerModel partner;
+    private UserModel user;
 }
