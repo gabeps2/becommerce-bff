@@ -70,6 +70,16 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     @TransactionalAdvice
+    public List<PartnerModel> findWithLimit(Integer limit) {
+        String qlString = "SELECT p FROM PartnerModel as p ORDER BY createdAt DESC";
+        TypedQuery<PartnerModel> query = entityManager
+                .createQuery(qlString, PartnerModel.class)
+                .setMaxResults(limit);
+        return query.getResultList();
+    }
+
+    @Override
+    @TransactionalAdvice
     public int update(long id, String name) {
         return 0;
     }

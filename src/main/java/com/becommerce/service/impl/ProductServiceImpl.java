@@ -8,9 +8,11 @@ import com.becommerce.service.ProductService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import java.util.List;
 import java.util.Optional;
 
+@Singleton
 @Named("ProductService")
 public class ProductServiceImpl implements ProductService {
 

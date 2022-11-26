@@ -21,6 +21,7 @@ public interface PartnerRepository {
     void deleteById(String id);
 
     List<PartnerModel> findAll();
+    List<PartnerModel> findWithLimit(Integer limit);
 
     int update(long id, @NotBlank String name);
 }

@@ -1,6 +1,7 @@
 package com.becommerce.controller;
 
 import com.becommerce.api.RegisterApi;
+import com.becommerce.model.CategorySchema;
 import com.becommerce.model.ProductSchema;
 import com.becommerce.model.RegisterPartnerSchema;
 import com.becommerce.model.RegisterUserSchema;
@@ -15,6 +16,13 @@ public class RegisterController implements RegisterApi {
 
     @Inject
     RegisterService registerService;
+
+    @Override
+    public HttpResponse<Void> registerCategory(String xApiToken, CategorySchema categorySchema) {
+        registerService.registerCategory(categorySchema, xApiToken);
+        return HttpResponse.ok();
+
+    }
 
     @Override
     public HttpResponse<Void> registerPartner(String xApiToken, RegisterPartnerSchema registerPartnerSchema) {

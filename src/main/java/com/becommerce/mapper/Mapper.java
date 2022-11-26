@@ -110,8 +110,39 @@ public class Mapper {
     }
 
     public List<PartnerSchema> toPartnersSchema(List<PartnerModel> partnerModels) {
-        Stream<PartnerSchema> partners;
-        partners = partnerModels.stream().map(this::toPartnerSchema);
+        Stream<PartnerSchema> partners = partnerModels.stream().map(this::toPartnerSchema);
         return partners.collect(Collectors.toList());
+    }
+
+    public CategoryModel toCategoryModel(CategorySchema categorySchema) {
+        return CategoryModel.builder()
+                .name(categorySchema.getName())
+                .build();
+    }
+
+    public CategorySchema toCategorySchema(CategoryModel categoryModel) {
+        return CategorySchema.builder()
+                .id(categoryModel.getId().toString())
+                .name(categoryModel.getName())
+                .build();
+    }
+
+    public List<CategorySchema> toCategoriesSchema(List<CategoryModel> categoriesModel) {
+        Stream<CategorySchema> categories = categoriesModel.stream().map(this::toCategorySchema);
+        return categories.collect(Collectors.toList());
+    }
+
+    public NewsSchema toNewSchema(PartnerModel partnerModel) {
+        return NewsSchema.builder()
+                .partnerId(partnerModel.getId().toString())
+                .partnerName(partnerModel.getName())
+                .partnerDescription(partnerModel.getDescription())
+                .backgroundImg(partnerModel.getBackgroundImage())
+                .build();
+    }
+
+    public List<NewsSchema> toNewsSchema(List<PartnerModel> partnersModel) {
+        Stream<NewsSchema> news = partnersModel.stream().map(this::toNewSchema);
+        return news.collect(Collectors.toList());
     }
 }

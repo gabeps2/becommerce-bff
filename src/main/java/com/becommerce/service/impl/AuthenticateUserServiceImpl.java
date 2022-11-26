@@ -17,6 +17,7 @@ import io.micronaut.http.HttpStatus;
 import javax.crypto.SecretKey;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -25,7 +26,8 @@ import java.util.Optional;
 
 import static com.becommerce.utils.PasswordStorage.verifyPassword;
 
-@Named
+@Singleton
+@Named("AuthenticateUserServiceImpl")
 public class AuthenticateUserServiceImpl implements AuthenticateUserService {
 
     @Value("${JWT_SECRET_KEY}")

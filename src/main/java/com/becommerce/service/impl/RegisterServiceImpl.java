@@ -7,6 +7,7 @@ import com.becommerce.model.*;
 import com.becommerce.model.enums.CustomerType;
 import com.becommerce.model.enums.ErrorEnum;
 import com.becommerce.repository.AddressRepository;
+import com.becommerce.repository.CategoryRepository;
 import com.becommerce.repository.UserRepository;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.ProductService;
@@ -19,9 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.becommerce.utils.PasswordStorage.createHash;
 
@@ -40,6 +39,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Inject
     AddressRepository addressRepository;
+
+    @Inject
+    CategoryRepository categoryRepository;
 
     @Inject
     Mapper mapper;
@@ -125,6 +127,11 @@ public class RegisterServiceImpl implements RegisterService {
 
         userRepository.save(user);
         partnerService.savePartner(partnerModel);
+    }
+
+    @Override
+    public void registerCategory(CategorySchema categorySchema, String token) {
+        categoryRepository.save(mapper.toCategoryModel(categorySchema));
     }
 
     void throwsException(HttpStatus httpStatus) {

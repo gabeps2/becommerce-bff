@@ -213,13 +213,46 @@ paths:
             - write:becommerce
             - read:becommerce
 
-  /home/{type}:
+  /category/register:
+    post:
+      tags:
+        - category
+        - register
+      summary: Register new category
+      description: ''
+      operationId: registerCategory
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategorySchema'
+      responses:
+        '201':
+          description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '405':
+          description: Validation exception
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /screen/home/{type}:
     get:
       tags:
         - home
       summary: Get partners categories
       description: ''
-      operationId: Get homepage data
+      operationId: getData
       parameters:
         - name: "type"
           in: path
@@ -230,9 +263,20 @@ paths:
             type: string
             default: products
             enum: [ "products", "services" ]
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
       responses:
         '200':
           description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeScreenSchema'
         '400':
           description: Invalid type supplied
         '405':
@@ -440,6 +484,34 @@ components:
         id:
           type: string
         name:
+          type: string
+
+    HomeScreenSchema:
+      type: object
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schema/CategorySchema'
+        news:
+          type: array
+          items:
+            $ref: '#/components/schema/NewsSchema'
+        partners:
+          type: array
+          items:
+            $ref: '#/components/schema/PartnerSchema'
+
+    NewsSchema:
+      type: object
+      properties:
+        partnerId:
+          type: string
+        partnerName:
+          type: string
+        partnerDescription:
+          type: string
+        backgroundImg:
           type: string
 
     ErrorView:
