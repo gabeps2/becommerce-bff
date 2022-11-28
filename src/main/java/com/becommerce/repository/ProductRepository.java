@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProductRepository {
     Optional<ProductModel> getById(String id);
     List<ProductModel> getByPartner(String id);
+    List<ProductModel> findByFilter(String filter);
     List<ProductModel> findAll();
-
     ProductModel save(ProductModel productModel);
 }

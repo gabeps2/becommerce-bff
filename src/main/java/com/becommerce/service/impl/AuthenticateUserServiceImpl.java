@@ -23,7 +23,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
+import static com.becommerce.model.enums.ErrorEnum.AUTHENTICATE_USER_ERROR;
+import static com.becommerce.model.enums.ErrorEnum.INVALID_TOKEN_ERROR;
 import static com.becommerce.utils.PasswordStorage.verifyPassword;
 
 @Singleton
@@ -45,14 +48,15 @@ public class AuthenticateUserServiceImpl implements AuthenticateUserService {
         SecretKey KEY = Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
         Optional<UserModel> userModel = userRepository.findByEmail(email);
 
-        if (!userModel.isPresent()) throwsException(HttpStatus.PRECONDITION_FAILED);
+        if (userModel.isEmpty()) throw throwsException(AUTHENTICATE_USER_ERROR, HttpStatus.PRECONDITION_FAILED);
 
         UserModel user = userModel.get();
 
         try {
-            if (!verifyPassword(password, user.getPassword())) throwsException(HttpStatus.PRECONDITION_FAILED);
+            if (!verifyPassword(password, user.getPassword()))
+                throw throwsException(AUTHENTICATE_USER_ERROR, HttpStatus.PRECONDITION_FAILED);
         } catch (Exception e) {
-            throwsException(HttpStatus.UNPROCESSABLE_ENTITY);
+            throw throwsException(AUTHENTICATE_USER_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         Date expiration = Date.from(
@@ -82,11 +86,30 @@ public class AuthenticateUserServiceImpl implements AuthenticateUserService {
                 .build();
     }
 
-    void throwsException(HttpStatus httpStatus) {
-        throw new AuthenticateUserException(
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getMessage(),
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getDetailMessage(),
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getCode(),
+    public UUID getSubject(String token) {
+        try {
+            return UUID.fromString(Jwts.parserBuilder()
+                    .setSigningKey(Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8)))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .getSubject());
+        } catch (Exception e) {
+            throw throwsException(INVALID_TOKEN_ERROR, HttpStatus.PRECONDITION_FAILED);
+        }
+    }
+
+    @Override
+    public void validateToken(String token) {
+        if (getSubject(token).toString().isEmpty())
+            throw throwsException(INVALID_TOKEN_ERROR, HttpStatus.PRECONDITION_FAILED);
+    }
+
+    AuthenticateUserException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {
+        return new AuthenticateUserException(
+                errorEnum.getMessage(),
+                errorEnum.getDetailMessage(),
+                errorEnum.getCode(),
                 httpStatus
         );
     }

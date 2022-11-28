@@ -181,12 +181,10 @@ paths:
             - write:becommerce
             - read:becommerce
 
-
   /product/register:
     post:
       tags:
         - product
-        - register
       summary: Register product
       description: ''
       operationId: registerProduct
@@ -206,6 +204,46 @@ paths:
       responses:
         '201':
           description: successful operation
+        '400':
+          description: Invalid tag value
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /product/find/{filter}:
+    get:
+      tags:
+        - product
+        - find
+        - search
+      summary: list product by filter
+      description: ''
+      operationId: findProducts
+      parameters:
+        - name: x-api-token
+          in: header
+          description: JWT Token
+          required: true
+          explode: true
+          schema:
+            type: string
+        - name: filter
+          in: path
+          description: filter
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
         '400':
           description: Invalid tag value
       security:

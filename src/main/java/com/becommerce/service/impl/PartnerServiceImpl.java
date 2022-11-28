@@ -13,6 +13,7 @@ import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Named("PartnerService")
 @Singleton
@@ -23,8 +24,13 @@ public class PartnerServiceImpl implements PartnerService {
     private Mapper mapper;
 
     @Override
-    public Optional<PartnerModel> getById(String id) {
+    public Optional<PartnerModel> getById(UUID id) {
         return partnerRepository.findById(id);
+    }
+
+    @Override
+    public Optional<PartnerModel> getByUserId(UUID id) {
+        return partnerRepository.findByUserId(id);
     }
 
     @Override
@@ -48,7 +54,7 @@ public class PartnerServiceImpl implements PartnerService {
     }
 
     @Override
-    public PartnerSchema getPartnerDto(String id, String name) {
+    public PartnerSchema getPartnerDto(UUID id, String name) {
         Optional<PartnerModel> partnerModel;
         if (!name.isEmpty()) {
             partnerModel = getByName(name);

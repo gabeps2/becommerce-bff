@@ -31,11 +31,6 @@ public class RegisterController implements RegisterApi {
     }
 
     @Override
-    public HttpResponse<Void> registerProduct(String X_API_TOKEN, ProductSchema registerProductRequest) {
-        return HttpResponse.noContent();
-    }
-
-    @Override
     public HttpResponse<Void> registerUser(RegisterUserSchema registerUserSchema) {
         registerService.registerUser(registerUserSchema);
         return HttpResponse.ok();

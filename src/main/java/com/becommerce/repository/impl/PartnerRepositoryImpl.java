@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Singleton
 @Repository
@@ -22,8 +23,19 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     @ReadOnly
-    public Optional<PartnerModel> findById(String id) {
+    public Optional<PartnerModel> findById(UUID id) {
         return Optional.ofNullable(entityManager.find(PartnerModel.class, id));
+    }
+
+    @Override
+    @ReadOnly
+    @TransactionalAdvice
+    public Optional<PartnerModel> findByUserId(UUID id) {
+        String qlString = "SELECT p FROM PartnerModel as p WHERE user_id = :id";
+        return entityManager
+                .createQuery(qlString, PartnerModel.class)
+                .setParameter("id", id)
+                .getResultList().stream().findFirst();
     }
 
     @Override
@@ -56,7 +68,7 @@ public class PartnerRepositoryImpl implements PartnerRepository {
 
     @Override
     @TransactionalAdvice
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
         findById(id).ifPresent(entityManager::remove);
     }
 

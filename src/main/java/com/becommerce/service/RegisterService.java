@@ -7,7 +7,6 @@ import com.becommerce.model.ProductSchema;
 
 public interface RegisterService {
     void registerUser(RegisterUserSchema userSchema);
-    void registerProduct(ProductSchema request, String token);
     void registerPartner(RegisterPartnerSchema registerPartnerSchema, String token);
 
     void registerCategory(CategorySchema categorySchema, String token);

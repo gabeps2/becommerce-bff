@@ -5,11 +5,13 @@ import com.becommerce.model.PartnerSchema;
 import com.becommerce.model.PartnersListSchema;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface PartnerService {
-    Optional<PartnerModel> getById(String id);
+    Optional<PartnerModel> getById(UUID id);
+    Optional<PartnerModel> getByUserId(UUID id);
     Optional<PartnerModel> getByName(String name);
     PartnersListSchema findAll();
     PartnerModel savePartner(PartnerModel partner);
-    PartnerSchema getPartnerDto(String id, String name);
+    PartnerSchema getPartnerDto(UUID id, String name);
 }

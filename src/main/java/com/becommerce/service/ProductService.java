@@ -1,14 +1,18 @@
 package com.becommerce.service;
 
-import com.becommerce.model.Product;
-import com.becommerce.model.ProductModel;
+import com.becommerce.model.ProductSchema;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    Optional<ProductModel> getById(String id);
-    List<Product> getByPartner(String id);
+    Optional<ProductSchema> getById(String id);
 
-    void save(ProductModel productModel);
+    List<ProductSchema> getByPartner(String partnerId);
+
+    void save(ProductSchema productSchema);
+
+    List<ProductSchema> findByFilter(String token, String filter);
+
+    void registerProduct(ProductSchema productSchema, String token);
 }

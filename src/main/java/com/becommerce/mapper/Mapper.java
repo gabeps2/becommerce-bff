@@ -1,13 +1,11 @@
 package com.becommerce.mapper;
 
 import com.becommerce.model.*;
-import lombok.var;
 
 import javax.inject.Named;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -72,22 +70,34 @@ public class Mapper {
         ).collect(Collectors.toList());
     }
 
-    public Product toProduct(ProductModel productModel) {
-        Product product = new Product();
+    public ProductSchema toProductSchema(ProductModel productModel) {
+        ProductSchema productSchema = new ProductSchema();
 
-        product.setDescription(productModel.getDescription());
-        product.setName(productModel.getName());
-        product.setPrice(0.0);
-        product.setQuantity(productModel.getQuantity());
-        product.setImage("");
+        productSchema.setCategory(productModel.getCategory().getName());
+        productSchema.setDescription(productModel.getDescription());
+        productSchema.setIcon(productModel.getIcon());
+        productSchema.setName(productModel.getName());
+        productSchema.setQuantity(productModel.getQuantity());
+        productSchema.setImages(productSchema.getImages());
 
-        return product;
+        return productSchema;
     }
 
-    public List<Product> toProducts(List<ProductModel> productModels) {
-        Stream<Product> products;
-        products = productModels.stream().map(this::toProduct);
+    public List<ProductSchema> toProductsSchema(List<ProductModel> productModels) {
+        Stream<ProductSchema> products;
+        products = productModels.stream().map(this::toProductSchema);
         return products.collect(Collectors.toList());
+    }
+
+    public ProductModel toProductModel(ProductSchema productSchema, CategoryModel categoryModel) {
+        return ProductModel.builder()
+                .name(productSchema.getName())
+                .price(productSchema.getPrice())
+                .category(categoryModel)
+                .icon(productSchema.getIcon())
+                .quantity(productSchema.getQuantity())
+                .build();
+
     }
 
     public PartnerSchema toPartnerSchema(PartnerModel partnerModel) {
@@ -144,5 +154,13 @@ public class Mapper {
     public List<NewsSchema> toNewsSchema(List<PartnerModel> partnersModel) {
         Stream<NewsSchema> news = partnersModel.stream().map(this::toNewSchema);
         return news.collect(Collectors.toList());
+    }
+
+    public ImageModel toImageModel(String url, ProductModel productModel) {
+        return ImageModel.builder().url(url).product(productModel).build();
+    }
+
+    public List<ImageModel> toImagesModel(List<String> urls, ProductModel productModel) {
+        return urls.stream().map(url -> toImageModel(url, productModel)).collect(Collectors.toList());
     }
 }

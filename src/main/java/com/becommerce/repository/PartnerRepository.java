@@ -5,10 +5,12 @@ import com.becommerce.model.PartnerModel;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface PartnerRepository {
 
-    Optional<PartnerModel> findById(String id);
+    Optional<PartnerModel> findById(UUID id);
+    Optional<PartnerModel> findByUserId(UUID id);
 
     Optional<PartnerModel> findByName(String name);
 
@@ -18,7 +20,7 @@ public interface PartnerRepository {
 
     PartnerModel saveWithException(@NotBlank String name);
 
-    void deleteById(String id);
+    void deleteById(UUID id);
 
     List<PartnerModel> findAll();
     List<PartnerModel> findWithLimit(Integer limit);

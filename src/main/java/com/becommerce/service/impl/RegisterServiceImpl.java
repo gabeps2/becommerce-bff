@@ -1,20 +1,17 @@
 package com.becommerce.service.impl;
 
 import com.becommerce.exception.AuthenticateUserException;
+import com.becommerce.exception.RegisterException;
 import com.becommerce.exception.RegisterUserException;
 import com.becommerce.mapper.Mapper;
 import com.becommerce.model.*;
 import com.becommerce.model.enums.CustomerType;
 import com.becommerce.model.enums.ErrorEnum;
-import com.becommerce.repository.AddressRepository;
-import com.becommerce.repository.CategoryRepository;
-import com.becommerce.repository.UserRepository;
+import com.becommerce.repository.*;
+import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
-import com.becommerce.service.ProductService;
 import com.becommerce.service.RegisterService;
-import com.becommerce.utils.TokenUtils;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.transaction.annotation.TransactionalAdvice;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,6 +19,7 @@ import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static com.becommerce.model.enums.ErrorEnum.REGISTER_PARTNER_ERROR;
 import static com.becommerce.utils.PasswordStorage.createHash;
 
 @Singleton
@@ -32,13 +30,16 @@ public class RegisterServiceImpl implements RegisterService {
     UserRepository userRepository;
 
     @Inject
-    ProductService productService;
-
-    @Inject
     PartnerService partnerService;
 
     @Inject
-    AddressRepository addressRepository;
+    ProductRepository productRepository;
+
+    @Inject
+    ImageRepository imageRepository;
+
+    @Inject
+    AuthenticateUserService authenticateUserService;
 
     @Inject
     CategoryRepository categoryRepository;
@@ -70,63 +71,38 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
-    public void registerProduct(ProductSchema productSchema, String token) {
-        Optional<PartnerModel> partner = partnerService.getById(TokenUtils.getUserId(token));
-        if (!partner.isPresent()) throwsException(HttpStatus.PRECONDITION_FAILED);
+    public void registerPartner(RegisterPartnerSchema request, String token) {
+        String userId = authenticateUserService.getSubject(token).toString();
+        Optional<UserModel> response = userRepository.findById(userId);
 
+        if (response.isEmpty()) throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.PRECONDITION_FAILED);
+        UserModel user = response.get();
         try {
-            ProductModel productModel = ProductModel.builder()
-                    .name(productSchema.getName())
-                    .price(productSchema.getPrice())
-                    .category(CategoryModel.builder().build())
-                    .icon(productSchema.getIcon())
-                    .partner(partner.get())
-                    .quantity(productSchema.getQuantity())
+            PartnerModel partnerModel = PartnerModel.builder()
+                    .user(user)
+                    .name(request.getPartnerSchema().getName())
+                    .cnpj(request.getPartnerSchema().getCnpj())
+                    .description(request.getPartnerSchema().getDescription())
+                    .location(request.getPartnerSchema().getLocation())
+                    .avaliation(5.0)
+                    .icon(request.getPartnerSchema().getIcon())
+                    .backgroundImage(request.getPartnerSchema().getBackgroundImage())
+                    .categories(mapper.toCategoryModel(request.getPartnerSchema().getCategories()))
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
 
+            AddressModel addressModel = mapper.toAddressModel(request.getAddressSchema());
+
+            user.setAddress(addressModel);
+            user.setType(CustomerType.PARTNER.getName());
+            user.setUpdatedAt(LocalDateTime.now());
+
+            userRepository.save(user);
+            partnerService.savePartner(partnerModel);
         } catch (Exception e) {
-            throw new NullPointerException();
+            throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
         }
-    }
-
-    @Override
-    @TransactionalAdvice
-    public void registerPartner(RegisterPartnerSchema request, String token) {
-        String userId = (request.getUserId().isEmpty()) ? TokenUtils.getUserId(token) :
-                request.getUserId();
-        Optional<UserModel> response = userRepository.findById(userId);
-
-        if (!response.isPresent()) {
-            throwsException(HttpStatus.PRECONDITION_FAILED);
-        }
-
-        UserModel user = response.get();
-
-        PartnerModel partnerModel = PartnerModel.builder()
-                .name(request.getPartnerSchema().getName())
-                .user(user)
-                .cnpj(request.getPartnerSchema().getCnpj())
-                .description(request.getPartnerSchema().getDescription())
-                .location(request.getPartnerSchema().getLocation())
-                .avaliation(5.0)
-                .icon(request.getPartnerSchema().getIcon())
-                .backgroundImage(request.getPartnerSchema().getBackgroundImage())
-                .categories(mapper.toCategoryModel(request.getPartnerSchema().getCategories()))
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
-
-        AddressModel addressModel = mapper.toAddressModel(request.getAddressSchema());
-
-        user.setAddress(addressModel);
-        user.setType(CustomerType.PARTNER.getName());
-        user.setUpdatedAt(LocalDateTime.now());
-
-
-        userRepository.save(user);
-        partnerService.savePartner(partnerModel);
     }
 
     @Override
@@ -134,11 +110,11 @@ public class RegisterServiceImpl implements RegisterService {
         categoryRepository.save(mapper.toCategoryModel(categorySchema));
     }
 
-    void throwsException(HttpStatus httpStatus) {
-        throw new AuthenticateUserException(
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getMessage(),
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getDetailMessage(),
-                ErrorEnum.AUTHENTICATE_USER_ERROR.getCode(),
+    private RegisterException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {
+        return new RegisterException(
+                errorEnum.getMessage(),
+                errorEnum.getDetailMessage(),
+                errorEnum.getCode(),
                 httpStatus
         );
     }

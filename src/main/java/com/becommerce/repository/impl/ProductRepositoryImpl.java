@@ -1,7 +1,5 @@
 package com.becommerce.repository.impl;
 
-import com.becommerce.model.PartnerModel;
-import com.becommerce.model.Product;
 import com.becommerce.model.ProductModel;
 import com.becommerce.repository.ProductRepository;
 import io.micronaut.data.annotation.Repository;
@@ -29,19 +27,31 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     @ReadOnly
-    public List<ProductModel> getByPartner(String id) {
-        String qlString = "SELECT tp FROM ProductModel as tp WHERE id = :id";
-
+    @TransactionalAdvice
+    public List<ProductModel> getByPartner(String partnerId) {
+        String qlString = "SELECT pm FROM ProductModel as pm WHERE partner_id = :id";
         return entityManager
                 .createQuery(qlString, ProductModel.class)
-                .setParameter("id", id)
+                .setParameter("id", partnerId)
+                .getResultList();
+    }
+
+    @Override
+    @TransactionalAdvice
+    @ReadOnly
+    public List<ProductModel> findByFilter(String filter) {
+        String qlString = "SELECT pm FROM ProductModel as pm WHERE name LIKE :filter";
+        return entityManager
+                .createQuery(qlString, ProductModel.class)
+                .setParameter("filter", "%" + filter + "%")
                 .getResultList();
     }
 
     @Override
     @ReadOnly
+    @TransactionalAdvice
     public List<ProductModel> findAll() {
-        String qlString = "SELECT tp FROM ProductModel as tp";
+        String qlString = "SELECT pm FROM ProductModel as pm";
         TypedQuery<ProductModel> query = entityManager.createQuery(qlString, ProductModel.class);
         return query.getResultList();
     }
