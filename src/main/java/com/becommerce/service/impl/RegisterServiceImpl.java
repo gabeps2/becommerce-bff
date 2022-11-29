@@ -98,7 +98,7 @@ public class RegisterServiceImpl implements RegisterService {
             user.setType(CustomerType.PARTNER.getName());
             user.setUpdatedAt(LocalDateTime.now());
 
-            userRepository.save(user);
+            userRepository.update(user);
             partnerService.savePartner(partnerModel);
         } catch (Exception e) {
             throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);

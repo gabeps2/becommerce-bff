@@ -57,7 +57,7 @@ public class UserModel {
     @NotFound(action = NotFoundAction.IGNORE)
     private AddressModel address;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     @NotFound(action = NotFoundAction.IGNORE)
     private PartnerModel partner;
 

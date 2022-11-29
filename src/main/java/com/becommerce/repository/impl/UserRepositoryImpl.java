@@ -66,7 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @TransactionalAdvice
     public UserModel update(UserModel user) {
-        entityManager.persist(user);
+        entityManager.merge(user);
         return user;
     }
 }
