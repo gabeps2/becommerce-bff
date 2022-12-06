@@ -6,7 +6,9 @@ public enum ErrorEnum {
     REGISTER_PRODUCT_ERROR("Register error", "Error when register new product", "BeBFF_03"),
     GET_PRODUCT_ERROR("Register error", "Error when get product", "BeBFF_04"),
     INVALID_TOKEN_ERROR("Invalid credentials.", "Invalid JWT token.", "BeBFF_05"),
-    REGISTER_PARTNER_ERROR("Register error", "Error when register new partner", "BeBFF_06");
+    REGISTER_PARTNER_ERROR("Register error", "Error when register new partner", "BeBFF_06"),
+    REGISTER_SALE_ERROR("Register error", "Error when register new sale", "BeBFF_07"),
+    IDENTIFIER_ERROR("Identifier error", "Error when get identifier", "BeBFF_08");
 
     private final String message;
     private final String detailMessage;

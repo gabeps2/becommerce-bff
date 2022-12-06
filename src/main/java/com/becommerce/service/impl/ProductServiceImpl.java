@@ -13,7 +13,7 @@ import com.becommerce.repository.ProductRepository;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.ProductService;
-import com.becommerce.utils.TokenUtils;
+import com.becommerce.utils.UUIDUtils;
 import io.micronaut.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -22,6 +22,7 @@ import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.becommerce.model.enums.ErrorEnum.GET_PRODUCT_ERROR;
 import static com.becommerce.model.enums.ErrorEnum.REGISTER_PRODUCT_ERROR;
@@ -46,13 +47,10 @@ public class ProductServiceImpl implements ProductService {
     @Inject
     private Mapper mapper;
 
-
     @Override
     public Optional<ProductSchema> getById(String id) {
-        Optional<ProductModel> productModel = productRepository.getById(id);
-        if (productModel.isEmpty()) {
-            throwsException(GET_PRODUCT_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
-        }
+        Optional<ProductModel> productModel = productRepository.findById(UUIDUtils.getFromString(id));
+        if (productModel.isEmpty()) throw throwsException(GET_PRODUCT_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
         return Optional.ofNullable(mapper.toProductSchema(productModel.get()));
     }
 

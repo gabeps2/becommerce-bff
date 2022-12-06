@@ -324,6 +324,57 @@ paths:
             - write:becommerce
             - read:becommerce
 
+  /sales:
+    get:
+      tags:
+        - sale
+      summary: Get user orders/sales
+      description: ''
+      operationId: getSales
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: User id
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalesSchema'
+
+  /sales/register:
+    post:
+      tags:
+        - sale
+      summary: Register order/sale
+      description: ''
+      operationId: registerSale
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: User id
+          required: true
+          explode: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterSaleSchema'
+      responses:
+        '200':
+          description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '405':
+          description: Validation exception
+
 components:
   schemas:
     AuthenticationSchema:
@@ -452,6 +503,8 @@ components:
     ProductSchema:
       type: object
       properties:
+        id:
+          type: string
         name:
           type: string
         description:
@@ -565,6 +618,53 @@ components:
         message: "Campo XXXX inválido"
         detailMessage: "XXX com formato inválido."
         code: "BEBFF_1"
+
+    SalesSchema:
+      type: array
+      items:
+        $ref: '#/components/schemas/SaleComponentSchema'
+
+    SaleComponentSchema:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        userName:
+          type: string
+        partnerId:
+          type: string
+        partnerName:
+          type: string
+        value:
+          type: double
+        status:
+          type: string
+        lastUpdate:
+          type: string
+        created:
+          type: string
+
+    RegisterSaleSchema:
+      type: object
+      properties:
+        partnerId:
+          type: String
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegisterSaleProductSchema'
+        note:
+          type: string
+
+    RegisterSaleProductSchema:
+      type: object
+      properties:
+        productId:
+          type: string
+        quantity:
+          type: integer
 
   securitySchemes:
     becommerce_auth:

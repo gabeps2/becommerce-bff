@@ -71,7 +71,7 @@ public class ProductModel {
     @ManyToOne
     private PartnerModel partner;
 
-    @ManyToMany(mappedBy = "products")
     @NotFound(action= NotFoundAction.IGNORE)
-    private List<SaleModel> sales = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "saleProductId.product", cascade = CascadeType.ALL)
+    private List<SaleProductModel> saleProductModelList = new ArrayList<>();
 }

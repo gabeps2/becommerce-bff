@@ -11,6 +11,7 @@ import com.becommerce.repository.*;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.RegisterService;
+import com.becommerce.utils.UUIDUtils;
 import io.micronaut.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.becommerce.model.enums.ErrorEnum.REGISTER_PARTNER_ERROR;
 import static com.becommerce.utils.PasswordStorage.createHash;
@@ -72,7 +74,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public void registerPartner(RegisterPartnerSchema request, String token) {
-        String userId = authenticateUserService.getSubject(token).toString();
+        UUID userId = UUIDUtils.getFromString(authenticateUserService.getSubject(token).toString());
         Optional<UserModel> response = userRepository.findById(userId);
 
         if (response.isEmpty()) throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.PRECONDITION_FAILED);

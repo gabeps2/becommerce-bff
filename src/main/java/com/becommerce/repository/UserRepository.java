@@ -5,9 +5,10 @@ import com.becommerce.model.UserModel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository {
-    Optional<UserModel> findById(String id);
+    Optional<UserModel> findById(UUID id);
 
     Optional<UserModel> findByName(String name);
 

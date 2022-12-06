@@ -24,11 +24,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     @TransactionalAdvice
-    public Optional<UserModel> findById(String id) {
+    public Optional<UserModel> findById(UUID id) {
         String qlString = "SELECT p FROM UserModel as p WHERE id = :id";
         return entityManager
                 .createQuery(qlString, UserModel.class)
-                .setParameter("id", UUID.fromString(id))
+                .setParameter("id", id)
                 .getResultList().stream().findFirst();
     }
 

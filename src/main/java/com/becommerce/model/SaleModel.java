@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
@@ -28,11 +30,16 @@ public class SaleModel {
     private UUID id;
 
     @NotNull
+    @Column(name = "number", insertable = false, updatable = false, unique = true)
+    @Generated(value = GenerationTime.INSERT)
+    private Integer number;
+
+    @NotNull
     @Column(name = "status", nullable = false)
     private String status;
 
     @NotNull
-    @Column(name = "note", unique = true)
+    @Column(name = "note")
     private String note;
 
     @NotNull
@@ -53,12 +60,8 @@ public class SaleModel {
     private PartnerModel partner;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(
-            name = "sale_product",
-            joinColumns = @JoinColumn(name = "sale_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<ProductModel> products = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "saleProductId.sale", cascade = CascadeType.ALL)
+    private List<SaleProductModel> saleProductModelList = new ArrayList<>();
 
 
 }

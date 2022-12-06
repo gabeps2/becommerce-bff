@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Singleton
 @Repository
@@ -21,8 +22,13 @@ public class ProductRepositoryImpl implements ProductRepository {
     private EntityManager entityManager;
 
     @Override
-    public Optional<ProductModel> getById(String id) {
-        return Optional.ofNullable(entityManager.find(ProductModel.class, id));
+    @TransactionalAdvice
+    public Optional<ProductModel> findById(UUID id) {
+        String qlString = "SELECT pm FROM ProductModel as pm WHERE id = :id";
+        return entityManager
+                .createQuery(qlString, ProductModel.class)
+                .setParameter("id", id)
+                .getResultList().stream().findFirst();
     }
 
     @Override
@@ -33,6 +39,17 @@ public class ProductRepositoryImpl implements ProductRepository {
         return entityManager
                 .createQuery(qlString, ProductModel.class)
                 .setParameter("id", partnerId)
+                .getResultList();
+    }
+
+    @Override
+    @ReadOnly
+    @TransactionalAdvice
+    public List<ProductModel> findMany(List<UUID> ids) {
+        String qlString = "SELECT pm FROM ProductModel as pm WHERE id IN :ids";
+        return entityManager
+                .createQuery(qlString, ProductModel.class)
+                .setParameter("ids", ids)
                 .getResultList();
     }
 

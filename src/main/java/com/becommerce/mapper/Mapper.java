@@ -3,7 +3,9 @@ package com.becommerce.mapper;
 import com.becommerce.model.*;
 
 import javax.inject.Named;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +81,7 @@ public class Mapper {
         productSchema.setName(productModel.getName());
         productSchema.setQuantity(productModel.getQuantity());
         productSchema.setImages(productSchema.getImages());
+        productSchema.setId(productModel.getId().toString());
 
         return productSchema;
     }
@@ -97,7 +100,6 @@ public class Mapper {
                 .icon(productSchema.getIcon())
                 .quantity(productSchema.getQuantity())
                 .build();
-
     }
 
     public PartnerSchema toPartnerSchema(PartnerModel partnerModel) {
@@ -162,5 +164,22 @@ public class Mapper {
 
     public List<ImageModel> toImagesModel(List<String> urls, ProductModel productModel) {
         return urls.stream().map(url -> toImageModel(url, productModel)).collect(Collectors.toList());
+    }
+
+
+    public SaleComponentSchema toSaleComponentSchema(SaleModel saleModel) {
+        return SaleComponentSchema.builder()
+                .id(saleModel.getId().toString())
+                .partnerName(saleModel.getPartner().getName())
+                .partnerId(saleModel.getPartner().getId().toString())
+                .status(saleModel.getStatus())
+                .userName(saleModel.getUser().getName())
+                .created(saleModel.getCreatedAt().toString())
+                .lastUpdate(saleModel.getUpdatedAt().toString())
+                .build();
+    }
+
+    public List<SaleComponentSchema> toSaleComponentSchemaList(List<SaleModel> saleModelList) {
+        return saleModelList.stream().map(this::toSaleComponentSchema).collect(Collectors.toList());
     }
 }
