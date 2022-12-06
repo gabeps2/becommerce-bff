@@ -182,4 +182,32 @@ public class Mapper {
     public List<SaleComponentSchema> toSaleComponentSchemaList(List<SaleModel> saleModelList) {
         return saleModelList.stream().map(this::toSaleComponentSchema).collect(Collectors.toList());
     }
+
+    public ProductQuantitySchema toProductQuantitySchema(ProductModel productModel, Integer quantity) {
+        return ProductQuantitySchema.builder()
+                .name(productModel.getName())
+                .productId(productModel.getId().toString())
+                .quantity(quantity)
+                .build();
+    }
+
+    public SaleSchema toSaleSchema(SaleModel saleModel, List<SaleProductModel> saleProductModelList) {
+        List<ProductQuantitySchema> productQuantitySchemaList = saleProductModelList
+                .stream()
+                .map(slm -> ProductQuantitySchema.builder()
+                        .productId(slm.getSaleProductId().getProduct().getId().toString())
+                        .quantity(slm.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        return SaleSchema.builder()
+                .number(saleModel.getNumber())
+                .status(saleModel.getStatus())
+                .created(saleModel.getCreatedAt().toString())
+                .lastUpdate(saleModel.getUpdatedAt().toString())
+                .address(toAddressSchema(saleModel.getAddress()))
+                .partner(toPartnerSchema(saleModel.getPartner()))
+                .products(productQuantitySchemaList)
+                .build();
+    }
 }

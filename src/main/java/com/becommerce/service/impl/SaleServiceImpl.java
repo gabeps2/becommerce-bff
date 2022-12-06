@@ -21,6 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.becommerce.model.enums.ErrorEnum.FIND_SALE_ERROR;
+
 @Singleton
 @Named
 public class SaleServiceImpl implements SaleService {
@@ -50,6 +52,13 @@ public class SaleServiceImpl implements SaleService {
     public List<SaleComponentSchema> getSales(String token) {
         List<SaleModel> sales = saleRepository.findByUser(authenticateUserService.getSubject(token));
         return mapper.toSaleComponentSchemaList(sales);
+    }
+
+    @Override
+    public SaleSchema findSale(String token, Integer number) {
+        Optional<SaleModel> saleModel = saleRepository.findByNumber(number);
+        if (saleModel.isEmpty()) throw throwsException(FIND_SALE_ERROR, HttpStatus.PRECONDITION_FAILED);
+        return mapper.toSaleSchema(saleModel.get(), saleModel.get().getSaleProductModelList());
     }
 
     @Override

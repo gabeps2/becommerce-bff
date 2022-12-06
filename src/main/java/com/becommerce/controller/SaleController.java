@@ -3,6 +3,7 @@ package com.becommerce.controller;
 import com.becommerce.api.SaleApi;
 import com.becommerce.model.RegisterSaleSchema;
 import com.becommerce.model.SaleComponentSchema;
+import com.becommerce.model.SaleSchema;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.SaleService;
 import io.micronaut.http.HttpResponse;
@@ -20,6 +21,12 @@ public class SaleController implements SaleApi {
     AuthenticateUserService authenticateUserService;
 
     @Override
+    public HttpResponse<SaleSchema> findSale(String xApiToken, Integer number) {
+        authenticateUserService.validateToken(xApiToken);
+        return HttpResponse.ok(saleService.findSale(xApiToken, number));
+    }
+
+    @Override
     public HttpResponse<List<SaleComponentSchema>> getSales(String xApiToken) {
         authenticateUserService.validateToken(xApiToken);
         return HttpResponse.ok(saleService.getSales(xApiToken));
@@ -27,6 +34,7 @@ public class SaleController implements SaleApi {
 
     @Override
     public HttpResponse<Void> registerSale(String xApiToken, RegisterSaleSchema registerSaleSchema) {
+        authenticateUserService.validateToken(xApiToken);
         saleService.registerSale(xApiToken, registerSaleSchema);
         return HttpResponse.ok();
     }

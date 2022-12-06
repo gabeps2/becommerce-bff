@@ -30,7 +30,7 @@ public class SaleModel {
     private UUID id;
 
     @NotNull
-    @Column(name = "number", insertable = false, updatable = false, unique = true)
+    @Column(name = "number", columnDefinition = "serial", insertable = false, updatable = false)
     @Generated(value = GenerationTime.INSERT)
     private Integer number;
 
@@ -60,7 +60,7 @@ public class SaleModel {
     private PartnerModel partner;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "saleProductId.sale", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "saleProductId.sale", cascade = CascadeType.ALL)
     private List<SaleProductModel> saleProductModelList = new ArrayList<>();
 
 

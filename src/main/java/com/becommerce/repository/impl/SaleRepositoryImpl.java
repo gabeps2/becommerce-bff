@@ -27,7 +27,7 @@ public class SaleRepositoryImpl implements SaleRepository {
     @Override
     @TransactionalAdvice
     public Optional<SaleModel> findByNumber(Integer number) {
-        String qlString = "SELECT pm FROM ProductModel as pm WHERE number = :number";
+        String qlString = "SELECT pm FROM SaleModel as pm WHERE number = :number";
         return entityManager
                 .createQuery(qlString, SaleModel.class)
                 .setParameter("number", number)

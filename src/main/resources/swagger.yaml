@@ -324,7 +324,7 @@ paths:
             - write:becommerce
             - read:becommerce
 
-  /sales:
+  /sale/list:
     get:
       tags:
         - sale
@@ -347,7 +347,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SalesSchema'
 
-  /sales/register:
+  /sale/register:
     post:
       tags:
         - sale
@@ -370,6 +370,40 @@ paths:
       responses:
         '200':
           description: Successful operation
+        '400':
+          description: Invalid type supplied
+        '405':
+          description: Validation exception
+
+  /sale/{number}:
+    get:
+      tags:
+        - sale
+      summary: Find sale by number
+      description: ''
+      operationId: findSale
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: User id
+          required: true
+          explode: true
+          schema:
+            type: string
+        - name: "number"
+          in: path
+          description: Sale number
+          required: true
+          explode: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleSchema'
         '400':
           description: Invalid type supplied
         '405':
@@ -629,6 +663,8 @@ components:
       properties:
         id:
           type: string
+        number:
+          type: integer
         userId:
           type: string
         userName:
@@ -654,17 +690,54 @@ components:
         products:
           type: array
           items:
-            $ref: '#/components/schemas/RegisterSaleProductSchema'
+            $ref: '#/components/schemas/ProductQuantitySchema'
         note:
           type: string
 
-    RegisterSaleProductSchema:
+    ProductQuantitySchema:
       type: object
       properties:
+        name:
+          type: string
         productId:
           type: string
         quantity:
           type: integer
+
+    SaleSchema:
+      type: object
+      properties:
+        number:
+          type: integer
+        lastUpdate:
+          type: string
+        created:
+          type: string
+        partner:
+          type: object
+          $ref: "#/components/schemas/PartnerSchema"
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductQuantitySchema'
+        address:
+          type: object
+          $ref: '#/components/schemas/AddressSchema'
+        status:
+          type: string
+        payment:
+          type: object
+          $ref: '#/components/schemas/PaymentSchema'
+
+    PaymentSchema:
+      type: object
+      properties:
+        status:
+          type: string
+        method:
+          type: string
+        date:
+          type: string
 
   securitySchemes:
     becommerce_auth:

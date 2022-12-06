@@ -8,7 +8,8 @@ public enum ErrorEnum {
     INVALID_TOKEN_ERROR("Invalid credentials.", "Invalid JWT token.", "BeBFF_05"),
     REGISTER_PARTNER_ERROR("Register error", "Error when register new partner", "BeBFF_06"),
     REGISTER_SALE_ERROR("Register error", "Error when register new sale", "BeBFF_07"),
-    IDENTIFIER_ERROR("Identifier error", "Error when get identifier", "BeBFF_08");
+    IDENTIFIER_ERROR("Identifier error", "Error when get identifier", "BeBFF_08"),
+    FIND_SALE_ERROR("Find error", "Error when find sale/order", "BeBFF_09");
 
     private final String message;
     private final String detailMessage;
