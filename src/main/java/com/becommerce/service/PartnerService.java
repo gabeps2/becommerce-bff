@@ -14,4 +14,5 @@ public interface PartnerService {
     PartnersListSchema findAll();
     PartnerModel savePartner(PartnerModel partner);
     PartnerSchema getPartnerDto(UUID id, String name);
+    void removePartner(UUID id);
 }

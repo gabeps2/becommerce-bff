@@ -74,7 +74,7 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public void registerPartner(RegisterPartnerSchema request, String token) {
-        UUID userId = UUIDUtils.getFromString(authenticateUserService.getSubject(token).toString());
+        UUID userId = authenticateUserService.getSubject(token);
         Optional<UserModel> response = userRepository.findById(userId);
 
         if (response.isEmpty()) throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.PRECONDITION_FAILED);
@@ -100,8 +100,9 @@ public class RegisterServiceImpl implements RegisterService {
             user.setType(CustomerType.PARTNER.getName());
             user.setUpdatedAt(LocalDateTime.now());
 
+            partnerModel = partnerService.savePartner(partnerModel);
+            user.setPartner(partnerModel);
             userRepository.update(user);
-            partnerService.savePartner(partnerModel);
         } catch (Exception e) {
             throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
         }

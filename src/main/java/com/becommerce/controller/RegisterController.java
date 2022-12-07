@@ -21,13 +21,6 @@ public class RegisterController implements RegisterApi {
     public HttpResponse<Void> registerCategory(String xApiToken, CategorySchema categorySchema) {
         registerService.registerCategory(categorySchema, xApiToken);
         return HttpResponse.ok();
-
-    }
-
-    @Override
-    public HttpResponse<Void> registerPartner(String xApiToken, RegisterPartnerSchema registerPartnerSchema) {
-        registerService.registerPartner(registerPartnerSchema, xApiToken);
-        return HttpResponse.ok();
     }
 
     @Override

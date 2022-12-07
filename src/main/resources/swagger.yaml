@@ -88,7 +88,7 @@ paths:
   /partner/register:
     post:
       tags:
-        - register
+        - partner
       summary: Register new partner
       operationId: registerPartner
       parameters:
@@ -128,6 +128,13 @@ paths:
       description: ''
       operationId: getByPartner
       parameters:
+        - name: "x-api-token"
+          in: header
+          description: Token
+          required: true
+          explode: true
+          schema:
+            type: string
         - name: "id"
           in: path
           description: Partner id
@@ -141,8 +148,9 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                $ref: '#/components/schemas/PartnerPageSchema'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductSchema'
         '400':
           description: Invalid tag value
       security:
@@ -176,6 +184,29 @@ paths:
                 $ref: '#/components/schemas/PartnersListSchema'
         '400':
           description: Invalid tag value
+      security:
+        - becommerce_auth:
+            - write:becommerce
+            - read:becommerce
+
+  /partner:
+    delete:
+      tags:
+        - partner
+      summary: Remove partner
+      description: ''
+      operationId: removePartner
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: Partner id
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
       security:
         - becommerce_auth:
             - write:becommerce
