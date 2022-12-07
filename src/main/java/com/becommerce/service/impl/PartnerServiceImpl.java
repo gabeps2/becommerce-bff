@@ -6,6 +6,7 @@ import com.becommerce.mapper.Mapper;
 import com.becommerce.model.PartnerSchema;
 import com.becommerce.model.PartnersListSchema;
 import com.becommerce.model.UserModel;
+import com.becommerce.model.enums.CustomerType;
 import com.becommerce.model.enums.ErrorEnum;
 import com.becommerce.repository.PartnerRepository;
 import com.becommerce.repository.UserRepository;
@@ -78,8 +79,12 @@ public class PartnerServiceImpl implements PartnerService {
     @Override
     public void removePartner(UUID id) {
         Optional<UserModel> userModel = userRepository.findById(id);
-        if (userModel.isEmpty() || userModel.get().getPartner() == null) throw throwsException(OPERATION_ERROR, HttpStatus.PRECONDITION_FAILED);
-        partnerRepository.deleteById(userModel.get().getPartner().getId());
+        if (userModel.isEmpty() || userModel.get().getPartner() == null)
+            throw throwsException(OPERATION_ERROR, HttpStatus.PRECONDITION_FAILED);
+        UserModel user = userModel.get();
+        partnerRepository.deleteById(user.getPartner().getId());
+        user.setType(CustomerType.CUSTOMER.getName());
+        userRepository.update(user);
     }
 
     AuthenticateUserException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {
