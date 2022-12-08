@@ -11,13 +11,13 @@ import com.becommerce.repository.*;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.RegisterService;
-import com.becommerce.utils.UUIDUtils;
 import io.micronaut.http.HttpStatus;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ import static com.becommerce.utils.PasswordStorage.createHash;
 
 @Singleton
 @Named("RegisterService")
-public class RegisterServiceImpl implements RegisterService {
+public class RegisterServiceImpl extends Service implements RegisterService {
 
     @Inject
     UserRepository userRepository;
@@ -58,6 +58,7 @@ public class RegisterServiceImpl implements RegisterService {
                     .email(userSchema.getEmail())
                     .password(hashedPassword)
                     .type(userSchema.getUserType())
+                    .cnpj(userSchema.getCnpj())
                     .updatedAt(LocalDateTime.now())
                     .createdAt(LocalDateTime.now())
                     .build();
@@ -79,17 +80,24 @@ public class RegisterServiceImpl implements RegisterService {
 
         if (response.isEmpty()) throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.PRECONDITION_FAILED);
         UserModel user = response.get();
+
+        List<CategoryModel> categories = mapper.toCategoryModel(request.getPartnerSchema().getCategories());
+        categories.forEach(c -> {
+            c.setCreatedAt(LocalDateTime.now());
+            c.setUpdatedAt(LocalDateTime.now());
+        });
+
         try {
             PartnerModel partnerModel = PartnerModel.builder()
                     .user(user)
                     .name(request.getPartnerSchema().getName())
-                    .cnpj(request.getPartnerSchema().getCnpj())
+                    .cnpj(user.getCnpj())
                     .description(request.getPartnerSchema().getDescription())
                     .location(request.getPartnerSchema().getLocation())
                     .avaliation(5.0)
                     .icon(request.getPartnerSchema().getIcon())
                     .backgroundImage(request.getPartnerSchema().getBackgroundImage())
-                    .categories(mapper.toCategoryModel(request.getPartnerSchema().getCategories()))
+                    .categories(categories)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
@@ -113,7 +121,8 @@ public class RegisterServiceImpl implements RegisterService {
         categoryRepository.save(mapper.toCategoryModel(categorySchema));
     }
 
-    private RegisterException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {
+    @Override
+    protected RegisterException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {
         return new RegisterException(
                 errorEnum.getMessage(),
                 errorEnum.getDetailMessage(),

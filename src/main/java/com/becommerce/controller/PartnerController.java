@@ -1,6 +1,7 @@
 package com.becommerce.controller;
 
 import com.becommerce.api.PartnerApi;
+import com.becommerce.model.PartnerPageSchema;
 import com.becommerce.model.PartnersListSchema;
 import com.becommerce.model.ProductSchema;
 import com.becommerce.model.RegisterPartnerSchema;
@@ -28,9 +29,9 @@ public class PartnerController implements PartnerApi {
     AuthenticateUserService authenticateUserService;
 
     @Override
-    public HttpResponse<List<ProductSchema>> getByPartner(String xApiToken, String id) {
+    public HttpResponse<PartnerPageSchema> getPartnerData(String xApiToken, String id) {
         authenticateUserService.validateToken(xApiToken);
-        return HttpResponse.ok(productService.getByPartner(id));
+        return HttpResponse.ok(partnerService.getPartnerData(id));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class PartnerController implements PartnerApi {
     @Override
     public HttpResponse<Void> removePartner(String xApiToken) {
         authenticateUserService.validateToken(xApiToken);
-        partnerService.removePartner(authenticateUserService.getSubject(xApiToken));
-        return HttpResponse.ok();
+//        partnerService.removePartner(authenticateUserService.getSubject(xApiToken));
+        return HttpResponse.notAllowed();
     }
 }

@@ -38,6 +38,10 @@ public class UserModel {
     private String password;
 
     @NotNull
+    @Column(name = "cnpj", nullable = false, unique = true)
+    private String cnpj;
+
+    @NotNull
     @Column(name = "type", nullable = false)
     private String type;
 

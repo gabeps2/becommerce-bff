@@ -126,7 +126,7 @@ paths:
         - partner
       summary: Partner page
       description: ''
-      operationId: getByPartner
+      operationId: getPartnerData
       parameters:
         - name: "x-api-token"
           in: header
@@ -148,9 +148,8 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProductSchema'
+                type: object
+                $ref: '#/components/schemas/PartnerPageSchema'
         '400':
           description: Invalid tag value
       security:
@@ -440,6 +439,33 @@ paths:
         '405':
           description: Validation exception
 
+  /image/presignurl:
+    get:
+      tags:
+        - image
+      summary: Get pre sign url
+      description: ''
+      operationId: getPreSignUrl
+      parameters:
+        - name: "x-api-token"
+          in: header
+          description: User id
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PreSignUrlSchema"
+        '400':
+          description: Invalid type supplied
+        '405':
+          description: Validation exception
+
 components:
   schemas:
     AuthenticationSchema:
@@ -461,6 +487,15 @@ components:
         expires_in:
           type: string
 
+    PreSignUrlSchema:
+      type: object
+      properties:
+        uploadUrl:
+          type: string
+        objectUrl:
+          type: string
+
+
     UserSchema:
       type: object
       properties:
@@ -480,6 +515,8 @@ components:
       type: object
       properties:
         name:
+          type: string
+        cnpj:
           type: string
         userType:
           type: string
@@ -514,10 +551,6 @@ components:
         addressSchema:
           type: object
           $ref: '#/components/schemas/AddressSchema'
-        productsLabel:
-          type: array
-          items:
-            type: string
         products:
           type: array
           items:

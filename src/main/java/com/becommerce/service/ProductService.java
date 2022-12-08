@@ -1,5 +1,6 @@
 package com.becommerce.service;
 
+import com.becommerce.model.PartnerPageSchema;
 import com.becommerce.model.ProductSchema;
 
 import java.util.List;

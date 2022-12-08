@@ -1,6 +1,5 @@
 package com.becommerce.model;
 
-import com.becommerce.model.enums.CustomerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -66,15 +65,15 @@ public class PartnerModel implements Serializable {
     private UserModel user;
 
     @ManyToMany(mappedBy = "partners")
-    @NotFound(action=NotFoundAction.IGNORE)
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<CategoryModel> categories = new ArrayList<>();
 
     @ManyToOne
-    @NotFound(action=NotFoundAction.IGNORE)
+    @NotFound(action = NotFoundAction.IGNORE)
     private SaleModel sale;
 
     @JsonIgnore
     @OneToMany(mappedBy = "partner")
-    @NotFound(action= NotFoundAction.IGNORE)
+    @NotFound(action = NotFoundAction.IGNORE)
     private List<ProductModel> products = new ArrayList<>();
 }

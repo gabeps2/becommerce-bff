@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ProductRepository {
     Optional<ProductModel> findById(UUID id);
-    List<ProductModel> getByPartner(String id);
+    List<ProductModel> findByPartner(UUID id);
     List<ProductModel> findMany(List<UUID> id);
     List<ProductModel> findByFilter(String filter);
     List<ProductModel> findAll();

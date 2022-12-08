@@ -34,7 +34,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     @ReadOnly
     @TransactionalAdvice
-    public List<ProductModel> getByPartner(String partnerId) {
+    public List<ProductModel> findByPartner(UUID partnerId) {
         String qlString = "SELECT pm FROM ProductModel as pm WHERE partner_id = :id";
         return entityManager
                 .createQuery(qlString, ProductModel.class)

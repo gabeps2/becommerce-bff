@@ -14,6 +14,16 @@ import java.util.stream.Stream;
 @Named("Mapper")
 public class Mapper {
 
+    public UserSchema toUserSchema(UserModel userModel) {
+        return UserSchema.builder()
+                .id(userModel.getId().toString())
+                .name(userModel.getName())
+                .userType(userModel.getType())
+                .email(userModel.getEmail())
+                .build();
+
+    }
+
     public PartnerSchema toPartner(PartnerModel partnerModel) {
         PartnerSchema partner = new PartnerSchema();
 
@@ -165,7 +175,6 @@ public class Mapper {
     public List<ImageModel> toImagesModel(List<String> urls, ProductModel productModel) {
         return urls.stream().map(url -> toImageModel(url, productModel)).collect(Collectors.toList());
     }
-
 
     public SaleComponentSchema toSaleComponentSchema(SaleModel saleModel) {
         return SaleComponentSchema.builder()

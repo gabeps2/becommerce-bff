@@ -10,8 +10,9 @@ public enum ErrorEnum {
     REGISTER_SALE_ERROR("Register error", "Error when register new sale", "BeBFF_07"),
     IDENTIFIER_ERROR("Identifier error", "Error when get identifier", "BeBFF_08"),
     FIND_SALE_ERROR("Find error", "Error when find sale/order", "BeBFF_09"),
-
-    OPERATION_ERROR("Operation error", "error when executing the operation", "BeBFF_10");
+    OPERATION_ERROR("Operation error", "Error when executing the operation", "BeBFF_10"),
+    FIND_PARTNER_ERROR("Find error", "Erro when find partner", "BeBFF_11"),
+    GENERATE_ERROR("Generate error", "Erro when generate resource", "BeBFF_12");
 
     private final String message;
     private final String detailMessage;

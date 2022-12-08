@@ -56,7 +56,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductSchema> getByPartner(String partnerId) {
-        List<ProductModel> productsModel = productRepository.getByPartner(partnerId);
+        List<ProductModel> productsModel = productRepository.findByPartner(UUIDUtils.getFromString(partnerId));
         return mapper.toProductsSchema(productsModel);
     }
 

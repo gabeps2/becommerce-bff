@@ -1,10 +1,9 @@
 package com.becommerce.service.impl;
 
 import com.becommerce.exception.AuthenticateUserException;
-import com.becommerce.model.PartnerModel;
-import com.becommerce.model.SessionSchema;
-import com.becommerce.model.UserModel;
-import com.becommerce.model.UserSchema;
+import com.becommerce.mapper.Mapper;
+import com.becommerce.model.*;
+import com.becommerce.model.enums.CustomerType;
 import com.becommerce.model.enums.ErrorEnum;
 import com.becommerce.repository.PartnerRepository;
 import com.becommerce.repository.UserRepository;
@@ -22,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,15 +41,17 @@ public class AuthenticateUserServiceImpl implements AuthenticateUserService {
     private PartnerRepository partnerRepository;
 
     @Inject
+    private Mapper mapper;
+
+    @Inject
     private UserRepository userRepository;
 
     @Override
     public SessionSchema authenticate(String email, String password) {
         SecretKey KEY = Keys.hmacShaKeyFor(JWT_SECRET_KEY.getBytes(StandardCharsets.UTF_8));
+
         Optional<UserModel> userModel = userRepository.findByEmail(email);
-
         if (userModel.isEmpty()) throw throwsException(AUTHENTICATE_USER_ERROR, HttpStatus.PRECONDITION_FAILED);
-
         UserModel user = userModel.get();
 
         try {
@@ -78,6 +80,10 @@ public class AuthenticateUserServiceImpl implements AuthenticateUserService {
                 .name(user.getName())
                 .userType(user.getType())
                 .build();
+
+        if (Objects.equals(user.getType(), CustomerType.PARTNER.getName()) && user.getPartner() != null) {
+            userSchema.setPartnerSchema(mapper.toPartnerSchema(user.getPartner()));
+        }
 
         return SessionSchema.builder()
                 .accessToken(jwtToken)
