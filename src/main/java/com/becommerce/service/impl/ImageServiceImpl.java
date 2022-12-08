@@ -8,9 +8,12 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.becommerce.model.PartnerModel;
 import com.becommerce.model.PreSignUrlSchema;
+import com.becommerce.model.ProductModel;
 import com.becommerce.model.Service;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
+import com.stripe.model.Product;
+import com.stripe.param.ProductCreateParams;
 import io.micronaut.http.HttpStatus;
 import com.becommerce.service.ImageService;
 import io.micronaut.context.annotation.Value;
@@ -23,6 +26,7 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.becommerce.model.enums.ErrorEnum.EXTERNAL_ERROR;
 import static com.becommerce.model.enums.ErrorEnum.GENERATE_ERROR;
 
 @Singleton

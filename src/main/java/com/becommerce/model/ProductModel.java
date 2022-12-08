@@ -39,7 +39,7 @@ public class ProductModel {
 
     @NotNull
     @Column(name = "price", nullable = false)
-    private Double price;
+    private Long price;
 
     @NotNull
     @Column(name = "quantity", nullable = false)

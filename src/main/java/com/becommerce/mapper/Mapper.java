@@ -92,6 +92,7 @@ public class Mapper {
         productSchema.setQuantity(productModel.getQuantity());
         productSchema.setImages(productSchema.getImages());
         productSchema.setId(productModel.getId().toString());
+        productSchema.price(productModel.getPrice());
 
         return productSchema;
     }

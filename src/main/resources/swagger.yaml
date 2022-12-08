@@ -247,7 +247,7 @@ paths:
         - product
         - find
         - search
-      summary: list product by filter
+      summary: List product by filter
       description: ''
       operationId: findProducts
       parameters:
@@ -266,7 +266,7 @@ paths:
           schema:
             type: string
       responses:
-        '201':
+        '200':
           description: successful operation
           content:
             application/json:
@@ -280,6 +280,37 @@ paths:
         - becommerce_auth:
             - write:becommerce
             - read:becommerce
+
+  /product/{id}:
+    get:
+      tags:
+        - product
+      summary: Find product by id
+      description: ''
+      operationId: findProduct
+      parameters:
+        - name: x-api-token
+          in: header
+          description: JWT Token
+          required: true
+          explode: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: filter
+          required: true
+          explode: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/ProductSchema'
 
   /category/register:
     post:
@@ -495,7 +526,6 @@ components:
         objectUrl:
           type: string
 
-
     UserSchema:
       type: object
       properties:
@@ -592,7 +622,7 @@ components:
         description:
           type: string
         price:
-          type: double
+          type: long
         quantity:
           type: integer
         image:
@@ -608,7 +638,7 @@ components:
         description:
           type: string
         price:
-          type: double
+          type: long
         quantity:
           type: int
         category:

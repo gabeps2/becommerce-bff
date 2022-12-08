@@ -12,6 +12,7 @@ import com.becommerce.repository.ImageRepository;
 import com.becommerce.repository.ProductRepository;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
+import com.becommerce.service.PaymentService;
 import com.becommerce.service.ProductService;
 import com.becommerce.utils.UUIDUtils;
 import io.micronaut.http.HttpStatus;
@@ -33,25 +34,24 @@ public class ProductServiceImpl implements ProductService {
 
     @Inject
     private AuthenticateUserService authenticateUserService;
-
     @Inject
     private PartnerService partnerService;
     @Inject
+    private PaymentService paymentService;
+    @Inject
     private ProductRepository productRepository;
-
     @Inject
     private CategoryRepository categoryRepository;
-
     @Inject
     private ImageRepository imageRepository;
     @Inject
     private Mapper mapper;
 
     @Override
-    public Optional<ProductSchema> getById(String id) {
+    public ProductSchema getById(String id) {
         Optional<ProductModel> productModel = productRepository.findById(UUIDUtils.getFromString(id));
         if (productModel.isEmpty()) throw throwsException(GET_PRODUCT_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
-        return Optional.ofNullable(mapper.toProductSchema(productModel.get()));
+        return mapper.toProductSchema(productModel.get());
     }
 
     @Override
@@ -86,9 +86,8 @@ public class ProductServiceImpl implements ProductService {
 
         Optional<CategoryModel> categoryModel = categoryRepository.findByName(productSchema.getCategory());
 
-        if (categoryModel.isEmpty())
-            category = categoryRepository.save(CategoryModel.builder().name(productSchema.getCategory()).build());
-        else category = categoryModel.get();
+        category = categoryModel.orElseGet(() ->
+                categoryRepository.save(CategoryModel.builder().name(productSchema.getCategory()).build()));
 
         ProductModel productModel = ProductModel.builder()
                 .category(category)
@@ -103,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
         productModel = productRepository.save(productModel);
         imageRepository.saveMany(mapper.toImagesModel(productSchema.getImages(), productModel));
+        paymentService.registerProduct(productModel);
     }
 
     AuthenticateUserException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {

@@ -19,6 +19,12 @@ public class ProductController implements ProductApi {
     AuthenticateUserService authenticateUserService;
 
     @Override
+    public HttpResponse<ProductSchema> findProduct(String xApiToken, String id) {
+        authenticateUserService.validateToken(xApiToken);
+        return HttpResponse.ok(productService.getById(id));
+    }
+
+    @Override
     public HttpResponse<List<ProductSchema>> findProducts(String xApiToken, String filter) {
         authenticateUserService.validateToken(xApiToken);
         return HttpResponse.ok(productService.findByFilter(xApiToken, filter));
@@ -29,4 +35,6 @@ public class ProductController implements ProductApi {
         productService.registerProduct(registerProductRequest, X_API_TOKEN);
         return HttpResponse.noContent();
     }
+
+
 }

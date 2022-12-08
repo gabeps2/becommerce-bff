@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    Optional<ProductSchema> getById(String id);
+    ProductSchema getById(String id);
 
     List<ProductSchema> getByPartner(String partnerId);
 
