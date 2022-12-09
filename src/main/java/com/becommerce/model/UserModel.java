@@ -50,6 +50,10 @@ public class UserModel {
     private String email;
 
     @NotNull
+    @Column(name = "payment_api_id", unique = true)
+    private String paymentApiId;
+
+    @NotNull
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

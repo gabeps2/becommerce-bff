@@ -8,6 +8,7 @@ import com.becommerce.model.enums.ErrorEnum;
 import com.becommerce.model.enums.SaleStatusEnum;
 import com.becommerce.repository.*;
 import com.becommerce.service.AuthenticateUserService;
+import com.becommerce.service.PaymentService;
 import com.becommerce.service.SaleService;
 import com.becommerce.utils.UUIDUtils;
 import io.micronaut.http.HttpStatus;
@@ -44,6 +45,9 @@ public class SaleServiceImpl implements SaleService {
 
     @Inject
     private AuthenticateUserService authenticateUserService;
+
+    @Inject
+    private PaymentService paymentService;
 
     @Inject
     private Mapper mapper;
@@ -100,6 +104,7 @@ public class SaleServiceImpl implements SaleService {
                 .collect(Collectors.toList());
 
         saleProductModels.forEach(spm -> saleProductRepository.save(spm));
+        paymentService.sendInvoicing(user.get(), saleProductModels);
     }
 
     BaseException throwsException(ErrorEnum errorEnum, HttpStatus httpStatus) {

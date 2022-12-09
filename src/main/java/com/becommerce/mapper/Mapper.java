@@ -186,6 +186,7 @@ public class Mapper {
                 .userName(saleModel.getUser().getName())
                 .created(saleModel.getCreatedAt().toString())
                 .lastUpdate(saleModel.getUpdatedAt().toString())
+                .number(saleModel.getNumber())
                 .build();
     }
 
