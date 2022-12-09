@@ -11,6 +11,7 @@ import com.becommerce.repository.*;
 import com.becommerce.service.AuthenticateUserService;
 import com.becommerce.service.PartnerService;
 import com.becommerce.service.RegisterService;
+import com.becommerce.utils.LoggerUtils;
 import io.micronaut.http.HttpStatus;
 
 import javax.inject.Inject;
@@ -112,6 +113,7 @@ public class RegisterServiceImpl extends Service implements RegisterService {
             user.setPartner(partnerModel);
             userRepository.update(user);
         } catch (Exception e) {
+            LoggerUtils.log().error(e.getMessage(), e);
             throw throwsException(REGISTER_PARTNER_ERROR, HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
